@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kiosk@UMPSA | Orders</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="sweetalert2.min.js"></script>
+  <link rel="stylesheet" href="sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <script src="https://replit.com/public/js/replit-badge-v2.js" theme="dark" position="bottom-right"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="poppins">
+
+  <!-- Start Navbar -->
+  <header class="bg-transparent bg-transparent fixed z-50 top-0 left-0 w-full transition duration-500">
+    <nav class="flex items-center max-w-screen-xl mx-auto px-6 py-3">
+      <!-- Left Side -->
+      <div class="flex flex-grow">
+        Kiosk@UMPSA
+      </div>
+      <!-- Right Side -->
+      <div class="flex items-center justify-end space-x-6">
+        <button><a href="signin.html">Sign In</a></button>
+        <button
+          class="bg-[#5B86FF] px-6 py-3 text-white poppins rounded-full ring-[#abc1ff] focus:outline-none focus:ring-4 transform transition duration-700 hover:scale-    105">Sign
+          Up</button>
+      </div>
+    </nav>
+  </header>
+  <!-- End Navbar -->
+
+  <!-- Main Body -->
+  <main class="h-screen banner">
+    <div class="max-w-screen-xl py-20 mx-auto px-6">
+
+      <!-- Back Button -->
+      <div class="relative top-8">
+        <a href='/' class="hover:underline poppins text-gray-700 select-none flex items-center space-x-2">
+          <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
+        </a>
+      </div>
+
+      <div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
+
+          <!-- Left Side -->
+          <div class="col-span-1">
+            <div class="flex flex-col mt-20">
+              <h1 class="text-2xl poppins pb-4 border-b border-gray-500 text-gray-700">Edit Payment Details</h1>
+              <form class="my-4">
+                <div class="flex flex-col space-y-3">
+
+                  <main class="grid w-full place-items-center">
+                      <div class="grid w-full grid-cols-2 gap-2 rounded-lg p-2 glass border border-gray-300">
+                          <div>
+                              <input type="radio" name="option" id="1" value="1" class="peer hidden" checked />
+                              <label for="1" class="block cursor-pointer select-none rounded-lg p-2 text-center peer-checked:bg-[#5B86FF] peer-checked:font-medium peer-checked:text-white">Online Payment</label>
+                          </div>
+
+                          <div>
+                              <input type="radio" name="option" id="2" value="2" class="peer hidden" />
+                              <label for="2" class="block cursor-pointer select-none rounded-lg p-2 text-center peer-checked:bg-[#5B86FF] peer-checked:font-medium peer-checked:text-white">Cash</label>
+                          </div>
+                      </div>
+                  </main>
+                  
+                  <!-- Todo: For registered user, display their name, unregistered user, let them enter name, make it required -->
+                  <input id="name" placeholder="Recipient Name"
+                    class="glass w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
+
+                  <!-- Todo: Only shows cards field, if 'Online payment' -->
+                  <input id="cardno" placeholder="Card No."
+                    class="glass w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
+
+                  <div class="grid grid-cols-2 gap-5">
+                    <input id="expiry" placeholder="Expiry Date"
+                      class="glass w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
+                    <input id="cvv" placeholder="CVV"
+                      class="glass w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
+                  </div>
+
+                  <input id="member" placeholder="Membership ID"
+                    class="glass w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
+                  
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Right Side -->
+          <div class="col-span-1">
+            <div class="glass p-6 box-border rounded-lg">
+              <div class="flex flex-col space-y-4 mb-3">
+                <p class="poppins text-gray-700 text-2xl">Items in Cart</p>
+              </div>
+
+              <!-- Food List -->
+              <div class="flex flex-col space-y-3 h-64 overflow-y-scroll removeScroll">
+                <div class="rounded-lg p-4 flex space-x-3">
+
+                  <div class="flex">
+                    <img class="w-24 object-contain" src="assets/nasi_lemak.png" alt="" />
+                  </div>
+
+                  <div class="flex flex-col space-y-3 flex-grow">
+                    <h5 class="text-base poppins text-gray-700">Nasi Lemak</h5>
+                    <h1 class="font-semibold text-lg text-primary poppins">RM7.00</h1>
+                    <p class="text-sm poppins text-gray-400">Kiosk A</p>
+                  </div>
+
+                  <div class="flex items-center px-4 py-2 space-x-3">
+                    <span class="text-lg text-gray-700 poppins select-none">1 items</span>
+                  </div>
+
+                  <div class="flex flex-col items-center justify-center">
+                    <i class="fa-solid fa-trash cursor-pointer transform transition hover:scale-105 duration-500"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-col space-y-3 my-4">
+                <div class="flex items-center">
+                  <span class="flex-grow poppins text-gray-700">Subtotal</span>
+                  <span class="poppins font-semibold text-black">RM7.00</span>
+                </div>
+                <div class="flex items-center">
+                  <!-- Todo: For registered user, calculate points based on RM1 = 2 points, unregistered user: signup to receive points -->
+                  <span class="flex-grow poppins text-gray-700">Points Earned</span>
+                  <span class="poppins font-semibold text-black">14 points</span>
+                  <!-- <span class="poppins font-semibold text-black underline cursor-pointer"><a href="signup.html">Sign up to receive points</a></span> -->
+                </div>
+                <div class="flex items-center">
+                  <!-- Todo: Calculation -->
+                  <span class="flex-grow poppins text-gray-700 text-xl">Total</span>
+                  <span class="poppins font-semibold text-black text-xl">RM7.00</span>
+                </div>
+              </div>
+
+              <button
+                onclick="onButtonClick()"
+                class="w-full py-3 bg-[#5B86FF] text-white ring-[#abc1ff] focus:outline-none focus:ring-4 mt-6 rounded-lg transition duration-300 poppins">Place
+                Order
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+  </main>
+</body>
+
+</html>
+<script src="script.js"></script>
+<script>
+  function onButtonClick() {
+    Swal.fire({
+      icon: 'success',
+      title: 'Order Placed!',
+      text: 'Your order has been placed and is being prepared!',
+      confirmButtonText: 'Okay',
+      confirmButtonColor: '#5B86FF'
+    })
+  }
+</script>

@@ -1,0 +1,32 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.banner {
+  background-image: url('./assets/banner.png');
+  background-size: cover;
+}
+
+/* Glassmorphism card effect */
+.glass {
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.57);
+  border-radius: 12px;
+  border: 1px solid rgba(209, 213, 219, 0.3);
+}
+
+/* Misc */
+.removeScroll::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
