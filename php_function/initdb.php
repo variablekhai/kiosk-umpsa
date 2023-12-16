@@ -1,6 +1,7 @@
 <?php 
 // Define the path to your .env file
-$envFilePath = __DIR__ . '/.env';
+//$envFilePath = __DIR__ . '/.env';
+$envFilePath = 'C:\xampp\htdocs\kiosk-umpsa\.env';
 
 // Check if the .env file exists
 if (file_exists($envFilePath)) {
@@ -28,4 +29,6 @@ if(!$conn) {
     echo "". mysqli_connect_error();
     exit();
 }
+$GLOBALS["conn"] = $conn;
+
 ?>
