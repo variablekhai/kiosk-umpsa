@@ -36,12 +36,12 @@
           <main class="grid w-full place-items-center">
               <div class="grid w-full grid-cols-2 gap-2 rounded-lg p-2 border border-gray-300">
                   <div>
-                      <input type="radio" name="type" id="1" value="1" class="peer hidden" checked />
+                      <input type="radio" name="type" id="1" value="Student" class="peer hidden" checked />
                       <label for="1" class="block cursor-pointer select-none rounded-lg p-1 text-center peer-checked:bg-[#5B86FF] peer-checked:font-medium peer-checked:text-white">Student</label>
                   </div>
 
                   <div>
-                      <input type="radio" name="type" id="2" value="2" class="peer hidden" />
+                      <input type="radio" name="type" id="2" value="Vendor" class="peer hidden" />
                       <label for="2" class="block cursor-pointer select-none rounded-lg p-1 text-center peer-checked:bg-[#5B86FF] peer-checked:font-medium peer-checked:text-white">Vendor</label>
                   </div>
               </div>
@@ -73,6 +73,7 @@ $("#btnSignUp").click(function(e) {
   e.preventDefault();
 
   var formData = $("#signUp").serialize();
+  console.log("form data", formData)
   $.post("php_function/signupProcess.php", formData, function(result) {
     if (result == 'true') {
       location.href = "signin"
