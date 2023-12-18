@@ -7,6 +7,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <?php include 'php_function/head.php'; ?>
   <title>Kiosk@UMPSA | Sign Up</title>
+  <script>
+    $(document).ready(function() {
+      $("#errorMsg").hide();
+      $("#btnSignUp").prop("disabled",true);
+      $("#name").change(function(e) {
+        validateSignin()
+      })
+      $("#email").change(function(e) {
+        validateSignin()
+      })
+      $("#password").change(function(e) {
+        validateSignin()
+      })
+    })
+    function validateSignin() {
+      var email = $("#email").val();
+      var pwd = $("#password").val();
+      var name = $("#name").val();
+      if (name.length == 0 || pwd.length < 6 || !validateEmail(email)) {
+        $("#errorMsg").show();
+        $("#btnSignUp").prop("disabled",true);
+      }
+      else {
+        $("#errorMsg").hide();
+        $("#btnSignUp").prop("disabled",false);
+      }
+    }
+    function validateEmail(email) {
+      return String(email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    }
+  </script>
 </head>
 
 <body class="">
@@ -23,13 +58,13 @@
       <form id="signUp" class="bg-white w-96 mt-6 p-4 rounded-lg shadow-lg">
         <div class="flex flex-col space-y-6">
 
-          <input id="name" placeholder="Name" name="name"
+          <input id="name" placeholder="Name" name="name" type="text"
             class="w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl" required>
 
-          <input id="email" placeholder="Email" name="email"
+          <input id="email" placeholder="Email" name="email" type="email"
             class="w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl" required>
 
-          <input id="password" placeholder="Password" name="password"
+          <input id="password" placeholder="Password" name="password" type="password"
             class="w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl" required>
 
           <!-- Todo: Change this sucky select -->
@@ -47,7 +82,7 @@
               </div>
           </main>
 
-          <!-- <span class="text-[#FF6B6B]">Invalid email address or password must at least 6 characters</span> -->
+          <span id="errorMsg" class="text-[#FF6B6B]">Invalid email address or password must at least 6 characters</span>
 
           <button id="btnSignUp"
             class="w-full py-3 bg-[#5B86FF] text-white ring-[#abc1ff] focus:outline-none focus:ring-4 mt-6 rounded-lg transition duration-300 poppins">Sign

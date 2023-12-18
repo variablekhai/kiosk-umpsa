@@ -10,7 +10,12 @@ include 'php_function/initdb.php';
   <?php include 'php_function/head.php'; ?>
   <title>Kiosk@UMPSA | Sign In</title>
 </head>
-
+<script>
+$(document).ready(function() {
+  $("#errorMsg").hide()
+  $("#invalidMsg").hide()
+})
+</script>
 <body>
 
   <?php include 'php_function/navbar.php'; ?>
@@ -31,7 +36,8 @@ include 'php_function/initdb.php';
           <input id="password" placeholder="Password" name="password"
             class="w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
 
-          <!-- <span class="text-[#FF6B6B]">Invalid email or password</span> -->
+          <span id="errorMsg" class="text-[#FF6B6B]">Insert email and password</span>
+          <span id="invalidMsg" class="text-[#FF6B6B]">Invalid email or password</span>
 
           <button id="btnSignIn"
             class="w-full py-3 bg-[#5B86FF] text-white ring-[#abc1ff] focus:outline-none focus:ring-4 mt-6 rounded-lg transition duration-300 poppins">Sign
@@ -57,14 +63,29 @@ include 'php_function/initdb.php';
 <script>
 $("#btnSignIn").click(function(e) {
   e.preventDefault();
+  var email = $("#email").val()
+  var password = $("#password").val()
+  
+  $("#invalidMsg").hide()
+  $("#errorMsg").hide()
 
-  var formData = $("#signIn").serialize();
-  $.post("php_function/signinProcess.php", formData, function(result) {
-    if (result == 'true') {
-      location.href = "vendor/dashboard"
-    }
-    console.log(result)
-  });
+  if (email.length > 0 && password.length > 0) {
+    var formData = $("#signIn").serialize();
+    $.post("php_function/signinProcess.php", formData, function(result) {
+      result = $.parseJSON(result)
+      if (result[0] == 'true') {
+        if (result[1] == 'Student') location.href = "user/dashboard"
+        if (result[1] == 'Vendor') location.href = "vendor/dashboard"
+      }
+      else {
+        $("#invalidMsg").show()
+      }
+    });
+  }
+  else {
+    $("#errorMsg").show()
+  }
+  
 });
 </script>
 <script src="script.js"></script>
