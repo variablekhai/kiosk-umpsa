@@ -10,6 +10,7 @@
   <script>
     $(document).ready(function() {
       $("#errorMsg").hide();
+      $("#nameMsg").hide();
       $("#btnSignUp").prop("disabled",true);
       $("#name").change(function(e) {
         validateSignin()
@@ -25,13 +26,26 @@
       var email = $("#email").val();
       var pwd = $("#password").val();
       var name = $("#name").val();
-      if (name.length == 0 || pwd.length < 6 || !validateEmail(email)) {
+      var validate = 0
+      if (name.length === 0) {
+        $("#nameMsg").show();
+      }
+      else {
+        $("#nameMsg").hide();
+        validate++
+      }
+      if (pwd.length < 6 || !validateEmail(email)) {
         $("#errorMsg").show();
-        $("#btnSignUp").prop("disabled",true);
       }
       else {
         $("#errorMsg").hide();
+        validate++;
+      }
+      if (validate >= 2) {
         $("#btnSignUp").prop("disabled",false);
+      }
+      else {
+        $("#btnSignUp").prop("disabled",true);
       }
     }
     function validateEmail(email) {
@@ -82,6 +96,7 @@
               </div>
           </main>
 
+          <span id="nameMsg" class="text-[#FF6B6B]">Insert name</span>
           <span id="errorMsg" class="text-[#FF6B6B]">Invalid email address or password must at least 6 characters</span>
 
           <button id="btnSignUp"
