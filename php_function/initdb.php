@@ -1,7 +1,7 @@
 <?php 
 // Define the path to your .env file
 //$envFilePath = __DIR__ . '/.env';
-$envFilePath = 'C:\xampp\htdocs\kiosk-umpsa\.env';
+$envFilePath = '../kiosk-umpsa/.env';
 
 // Check if the .env file exists
 if (file_exists($envFilePath)) {
