@@ -1,5 +1,5 @@
 <?php
-echo '
+echo <<<HTML
 <!-- Start Navbar -->
 <header class="bg-transparent bg-transparent fixed z-50 top-0 left-0 w-full transition duration-500">
     <nav class="flex items-center max-w-screen-xl mx-auto px-6 py-3">
@@ -15,5 +15,7 @@ echo '
           Up</button>
       </div>
     </nav>
-  </header>
-  <!-- End Navbar -->';?>
+</header>
+<!-- End Navbar -->
+HTML;
+?>
