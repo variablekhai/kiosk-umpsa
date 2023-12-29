@@ -18,11 +18,8 @@ if(isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["name"]))
         if (mysqli_query($conn, $sql)) {
             $status = 'true';
 
-            //Insert into Student or Vendor table
-            if($type == 'Student') {
-                $sql2 = "INSERT INTO Student VALUES ('$userID', '$name', '$email', 0)";
-            }
-            else {
+            //Insert into Vendor table
+            if($type == 'Vendor') {
                 $vendorID = uniqid();
                 $sql2 = "INSERT INTO Vendor VALUES ('$vendorID', '$userID', '$name', '0')";
             }

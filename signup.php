@@ -83,15 +83,16 @@
 
           <!-- Todo: Change this sucky select -->
           <main class="grid w-full place-items-center">
+              <label class="mb-1">Are you a vendor?</label>
               <div class="grid w-full grid-cols-2 gap-2 rounded-lg p-2 border border-gray-300">
                   <div>
-                      <input type="radio" name="type" id="1" value="Student" class="peer hidden" checked />
-                      <label for="1" class="block cursor-pointer select-none rounded-lg p-1 text-center peer-checked:bg-[#5B86FF] peer-checked:font-medium peer-checked:text-white">Student</label>
+                      <input type="radio" name="type" id="1" value="Vendor" class="peer hidden" />
+                      <label for="1" class="block cursor-pointer select-none rounded-lg p-1 text-center peer-checked:bg-[#5B86FF] peer-checked:font-medium peer-checked:text-white">Yes</label>
                   </div>
 
                   <div>
-                      <input type="radio" name="type" id="2" value="Vendor" class="peer hidden" />
-                      <label for="2" class="block cursor-pointer select-none rounded-lg p-1 text-center peer-checked:bg-[#5B86FF] peer-checked:font-medium peer-checked:text-white">Vendor</label>
+                      <input type="radio" name="type" id="2" value="User" class="peer hidden" checked/>
+                      <label for="2" class="block cursor-pointer select-none rounded-lg p-1 text-center peer-checked:bg-[#5B86FF] peer-checked:font-medium peer-checked:text-white">No</label>
                   </div>
               </div>
           </main>
