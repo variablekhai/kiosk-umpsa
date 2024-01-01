@@ -2,6 +2,11 @@
 <html lang="en">
 <?php 
 include 'php_function/initdb.php';
+
+if (isset($_SESSION['email'])) {
+  header("Location: index.php");
+  exit();
+}
 ?>
 <head>
   <meta charset="UTF-8">
@@ -73,9 +78,10 @@ $("#btnSignIn").click(function(e) {
     var formData = $("#signIn").serialize();
     $.post("php_function/signinProcess.php", formData, function(result) {
       result = $.parseJSON(result)
+      console.log(result)
       if (result[0] == 'true') {
-        if (result[1] == 'Student') location.href = "user/dashboard"
-        if (result[1] == 'Vendor') location.href = "vendor/dashboard"
+        if (result[1] == 'User') location.href = "index"
+        if (result[1] == 'Vendor') location.href = "index"
       }
       else {
         $("#invalidMsg").show()

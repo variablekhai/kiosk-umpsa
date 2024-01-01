@@ -9,30 +9,39 @@ if(isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["name"]))
     $sql = "SELECT * FROM User WHERE username='$email' AND password='$password' AND user_type = '$type'";
     $result = mysqli_query($conn, $sql);
     if(mysqli_num_rows($result) > 0) {
-        $status = 'false';
+        $status = 'Account already exists';
     }
     else {
-        $userID = uniqid();
+        $user_id = uniqid();
+        $membership_id = uniqid();
         $now = date('Y-m-d H:i:s');
-        $sql = "INSERT INTO User VALUES ('$userID', '$email', '$password', '$type', '$now')";
-        if (mysqli_query($conn, $sql)) {
+
+        //Change this later
+        $user_qr = '123456789';
+
+        $membership_sql = "INSERT INTO Membership VALUES ('$membership_id', 0)";
+        mysqli_query($conn, $membership_sql);
+        $user_sql = "INSERT INTO User VALUES ('$user_id', '$membership_id', '$email', '$password', '$type', '$name', '$email', '$now', '$user_qr')";
+        if (mysqli_query($conn, $user_sql)) {
             $status = 'true';
 
             //Insert into Vendor table
             if($type == 'Vendor') {
-                $vendorID = uniqid();
-                $sql2 = "INSERT INTO Vendor VALUES ('$vendorID', '$userID', '$name', '0')";
+                $vendor_id = uniqid();
+                $vendor_qr = '123456789';
+                $vendor_sql = "INSERT INTO Vendor VALUES ('$vendor_id', '$user_id', '$vendor_qr', '0')";
+
+                if (mysqli_query($conn, $vendor_sql)) {
+                    $status = 'true';
+                }
+                else {
+                    $status = "Error: " . $vendor_sql . "<br>" . mysqli_error($conn);
+                }
             }
 
-            if (mysqli_query($conn, $sql2)) {
-                $status = 'true';
-            }
-            else {
-                $status = "Error: " . $sql2 . "<br>" . mysqli_error($conn);
-            }
         } 
         else {
-            $status = "Error: " . $sql . "<br>" . mysqli_error($conn);
+            $status = "Error: " . $user_sql . "<br>" . mysqli_error($conn);
         }
     }
     echo $status;

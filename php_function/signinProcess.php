@@ -9,13 +9,16 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
     $result = mysqli_query($conn, $sql);
     if(mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
-        $type = $row["user_type"];
         session_start();
-        $_SESSION["email"] = $email;
+        $_SESSION['email'] = $email;
         $_SESSION["password"] = $password;
+        $_SESSION["name"] = $row["name"];
+        $_SESSION["type"] = $row["user_type"];
+        $type = $row["user_type"];
+        $_SESSION["image"] = $row["image"];
         $status = 'true';
     }
-    $arr = array($status,$type);
+    $arr = array($status, $type);
     echo json_encode($arr);
 }
 ?>

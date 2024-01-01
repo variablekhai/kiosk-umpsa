@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+// Get all user's data from session
+$email = $_SESSION['email'];
+$password = $_SESSION['password'];
+$userName = $_SESSION['name'];
+$userType = $_SESSION['user_type'];
+$userImage = $_SESSION['image'];
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -88,7 +101,9 @@
                   style="object-fit: cover; width: 12rem; height: 12rem;" class="rounded-full" />
                 <div class="mt-2">
                   <span
-                    class="text-[#5B86FF] bg-primary-light border border-primary rounded-full text-primary text-sm poppins px-4 py-1 inline-block mb-4 ">Student</span>
+                    class="text-[#5B86FF] bg-primary-light border border-primary rounded-full text-primary text-sm poppins px-4 py-1 inline-block mb-4 ">
+                    <?php echo $userType; ?>
+                  </span>
                   <span
                     class="text-[#5B86FF] bg-primary-light border border-primary rounded-full text-primary text-sm poppins px-4 py-1 inline-block mb-4 ">130
                     points</span>
@@ -99,15 +114,19 @@
               <div>
                 <form class="w-full flex flex-col space-y-4">
                   <input id="name" placeholder="Name"
+                    value="<?php echo $userName; ?>"
                     class="w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
 
                   <input id="email" placeholder="Email" disabled
+                    value="<?php echo $email; ?>"
                     class="w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
 
                   <input id="password" placeholder="Password"
+                    value="<?php echo $password; ?>"
                     class="w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
 
                   <input id="image" placeholder="Image Link"
+                    value="<?php echo $userImage; ?>"
                     class="w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
                   
                   <button
