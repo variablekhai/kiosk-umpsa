@@ -21,7 +21,7 @@ if(isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["name"]))
 
         $membership_sql = "INSERT INTO Membership VALUES ('$membership_id', 0)";
         mysqli_query($conn, $membership_sql);
-        $user_sql = "INSERT INTO User VALUES ('$user_id', '$membership_id', '$email', '$password', '$type', '$name', '$email', '$now', '$user_qr')";
+        $user_sql = "INSERT INTO User VALUES ('$user_id', '$membership_id', '$email', '$password', '$type', '$name', '$email', '$now', '$user_qr', NULL)";
         if (mysqli_query($conn, $user_sql)) {
             $status = 'true';
 
