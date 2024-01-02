@@ -2,18 +2,32 @@
     $(document).ready(function() {
         $('[data-modal-toggle="qr-modal"]').click(function() {
             var userId = $(this).data('user-id');
+            var name;
+
             $.ajax({
                 type: "POST",
-                url: "../php_function/generate_qr.php",
+                url: "../php_function/fetchUserProcess.php",
                 data: {
                     id: userId
                 },
-                success: function(data) {
-                    $('#qr-modal .space-y-4').html(`
-                        <div class="flex flex-col items-center justify-center">
-                            <img class="w-40 h-40" src="${data}" alt="User QR Code">
-                        </div>
-                    `);
+                success: function(response) {
+                    name = response.name;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "../php_function/generate_qr.php",
+                        data: {
+                            id: userId
+                        },
+                        success: function(data) {
+                            $('#qr-modal .space-y-4').html(`
+                                <div class="flex flex-col items-center justify-center">
+                                    <img class="w-40 h-40" src="${data}" alt="User QR Code">
+                                    <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">${name}</h3>
+                                </div>
+                            `);
+                        }
+                    });
                 }
             });
         });
