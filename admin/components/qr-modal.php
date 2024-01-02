@@ -1,3 +1,24 @@
+<script>
+    $(document).ready(function() {
+        $('[data-modal-toggle="qr-modal"]').click(function() {
+            var userId = $(this).data('user-id');
+            $.ajax({
+                type: "POST",
+                url: "../php_function/generate_qr.php",
+                data: {
+                    id: userId
+                },
+                success: function(data) {
+                    $('#qr-modal .space-y-4').html(`
+                        <div class="flex flex-col items-center justify-center">
+                            <img class="w-40 h-40" src="${data}" alt="User QR Code">
+                        </div>
+                    `);
+                }
+            });
+        });
+    });
+</script>
 <!-- QR Modal -->
 <div id="qr-modal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative w-full max-w-md max-h-full">
