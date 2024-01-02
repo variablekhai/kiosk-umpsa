@@ -10,6 +10,7 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
     if(mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         session_start();
+        $_SESSION['id'] = $row["user_id"];
         $_SESSION['email'] = $email;
         $_SESSION["password"] = $password;
         $_SESSION["name"] = $row["name"];
