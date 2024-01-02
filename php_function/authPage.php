@@ -5,4 +5,5 @@ if(!isset($_SESSION['email']) && empty($_SESSION['password'])) {
     <script>window.location = "/kiosk-umpsa/";</script>
     HTML;
 }
+session_abort();
 ?>

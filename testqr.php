@@ -9,7 +9,7 @@
 <?php
 include "phpqrcode/qrlib.php";
 
-$input = "Hello";
+$input = uniqid();
 
 // Start output buffering
 ob_start();
