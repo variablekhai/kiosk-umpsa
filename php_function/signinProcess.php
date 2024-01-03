@@ -5,7 +5,7 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
     $type = '';
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $sql = "SELECT * FROM User WHERE username='$email' AND password='$password'";
+    $sql = "SELECT u.*, v.kiosk_id FROM User u LEFT JOIN Vendor v ON u.user_id = v.user_id WHERE username='$email' AND password='$password'";
     $result = mysqli_query($conn, $sql);
     if(mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
@@ -16,6 +16,9 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
         $_SESSION["password"] = $password;
         $_SESSION["name"] = $row["name"];
         $_SESSION["type"] = $row["user_type"];
+        if($row["user_type"] == 'vendor'){
+            $_SESSION['kiosk_id'] = $row["kiosk_id"];
+        }
         $type = $row["user_type"];
         $_SESSION["image"] = $row["image"];
         $status = 'true';
