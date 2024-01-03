@@ -161,18 +161,10 @@
 </style>
 <script src="script.js"></script>
 <script>
-  
-  // Selected shop
-  document.querySelectorAll('.shop-chips p').forEach(shop => {
-    shop.addEventListener('click', () => {
-      // Reset background color for all shops
-      document.querySelectorAll('.shop-chips p').forEach(s => {
-        s.classList.remove('bg-[#5B86FF]');
-        s.classList.remove('text-white');
-      });
-      // Set selected shop to have different visual
-      shop.classList.add('bg-[#5B86FF]');
-      shop.classList.add('text-white');
-    });
-  });
+  $(".shop-chips p").click(function(e) {
+    $(".shop-chips p").removeClass('bg-[#5B86FF]');
+    $(".shop-chips p").removeClass('text-white');
+    $(this).addClass('bg-[#5B86FF]');
+    $(this).addClass('text-white');
+  })
 </script>

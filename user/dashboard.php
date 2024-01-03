@@ -94,16 +94,6 @@
       </div>
     </div>
   </div>
-  <script>
-    $("#btnLogout").click(function(e){
-      e.preventDefault();
-      $.post("../php_function/logoutProcess.php", '', function(result){
-        if(result == 'true') {
-          location.href = "/kiosk-umpsa/"
-        }
-      })
-    })
-  </script>
 </body>
 
 </html>
