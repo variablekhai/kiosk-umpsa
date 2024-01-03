@@ -82,6 +82,7 @@ $("#btnSignIn").click(function(e) {
       if (result[0] == 'true') {
         if (result[1] == 'User') location.href = "index"
         if (result[1] == 'Vendor') location.href = "index"
+        if (result[1] == 'Admin') location.href = "admin/dashboard"
       }
       else {
         $("#invalidMsg").show()

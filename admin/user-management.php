@@ -15,7 +15,6 @@ if (mysqli_num_rows($result) > 0) {
     $users[] = $row;
   }
 }
-echo json_encode($users);
 ?>
 
 <!DOCTYPE html>

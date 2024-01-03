@@ -1,5 +1,5 @@
 
- c<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
