@@ -14,12 +14,24 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
   <script src="../assets/js/charts-lines.js" defer></script>
   <script src="../assets/js/charts-pie.js" defer></script>
+
+  <!-- Flow Bite Link And Jquery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+  <script src="../jquery/jquery-3.7.1.min.js"></script>
 </head>
 
 <body class="poppins">
   <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
     <!-- Sidebar -->
-    <?php include('sidebar.php') ?>
+    <?php
+    include('sidebar.php');
+    include './components/add-menu-modal.php';
+    include './components/edit-menu-modal.php';
+    include './components/delete-menu-modal.php';
+    include './components/qr-menu-modal.php';
+    ?>
+    
 
     <!-- Main Body -->
     <div class="flex flex-col flex-1 w-full">
@@ -34,6 +46,13 @@
           <p class="mb-8 text-gray-600 dark:text-gray-400">
             Manage, organize, and update menu for your kiosk.
           </p>
+
+          <div class="flex justify-end mb-2">
+            <button data-modal-target="add-menu-modal" data-modal-toggle="add-menu-modal" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-primary border border-transparent rounded-md focus:outline-none">
+              Add New Menu
+              <span class="ml-2" aria-hidden="true"><i class="fa-solid fa-plus" style="color: #ffffff;"></i></span>
+            </button>
+          </div>
 
           <!-- Users Table -->
           <div class="w-full overflow-hidden rounded-lg shadow-xs">
@@ -221,6 +240,9 @@
                 </tbody>
               </table>
             </div>
+
+            <!-- Pagination start kere -->
+
             <div
               class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800"
             >
@@ -295,3 +317,10 @@
 </body>
 
 </html>
+
+<script>
+  $("button[data-modal-target='edit-menu-modal']").click(function() {
+    var menuId = $(this).data('menu-id');
+    $("#edit-menu-modal").data('menu-id', menuId);
+  });
+</script>
