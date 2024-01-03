@@ -221,6 +221,9 @@ include '../php_function/authPage.php';
                 </tbody>
               </table>
             </div>
+
+
+            <!-- Pagination start here -->
             <div
               class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800"
             >
@@ -286,6 +289,7 @@ include '../php_function/authPage.php';
                 </nav>
               </span>
             </div>
+
           </div>
         </div>
       </main>
@@ -295,3 +299,8 @@ include '../php_function/authPage.php';
 </body>
 
 </html>
+<script>
+  $('#addBtn'),click(function(){
+
+  });
+</script>
