@@ -21,7 +21,7 @@ if(isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["name"]))
 
         $membership_sql = "INSERT INTO Membership VALUES ('$membership_id', 0)";
         mysqli_query($conn, $membership_sql);
-        $user_sql = "INSERT INTO User VALUES ('$user_id', '$membership_id', '$email', '$password', '$type', '$name', '$email', '$now', '$user_qr', NULL)";
+        $user_sql = "INSERT INTO User VALUES ('$user_id', '$membership_id', '$email', '$password', '$type', '$name', '$email', '$now', '$user_qr', 'https://linguistics.ucla.edu/wp-content/uploads/2020/06/placeholder-300x248.jpg')";
         if (mysqli_query($conn, $user_sql)) {
             $status = 'true';
 
@@ -29,7 +29,7 @@ if(isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["name"]))
             if($type == 'Vendor') {
                 $vendor_id = uniqid();
                 $vendor_qr = '123456789';
-                $vendor_sql = "INSERT INTO Vendor VALUES ('$vendor_id', '$user_id', '$vendor_qr', '0')";
+                $vendor_sql = "INSERT INTO Vendor VALUES ('$vendor_id', '$user_id', '$vendor_qr', '0', 'Pending')";
 
                 if (mysqli_query($conn, $vendor_sql)) {
                     $status = 'true';
