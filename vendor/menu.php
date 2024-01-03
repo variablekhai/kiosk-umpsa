@@ -1,14 +1,10 @@
-<?php
-include '../php_function/authPage.php';
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kiosk@UMPSA | Orders</title>
+  <title>Kiosk@UMPSA | Manage Menu</title>
   <link rel="stylesheet" href="../style.css" />
   <link rel="stylesheet" href="../assets/css/tailwind.output.css" />
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
@@ -32,11 +28,11 @@ include '../php_function/authPage.php';
           <h2
             class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
           >
-            Orders
+            Manage Menu
           </h2>
 
           <p class="mb-8 text-gray-600 dark:text-gray-400">
-            View, and update orders made by students.
+            Manage, organize, and update menu for your kiosk.
           </p>
 
           <!-- Users Table -->
@@ -47,11 +43,11 @@ include '../php_function/authPage.php';
                   <tr
                     class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b bg-gray-50"
                   >
-                    <th class="px-4 py-3">Order</th>
-                    <th class="px-4 py-3">Quantity</th>
-                    <th class="px-4 py-3">Total</th>
-                    <th class="px-4 py-3">Status</th>
-                    <th class="px-4 py-3">Time Created</th>
+                    <th class="px-4 py-3">Name</th>
+                    <th class="px-4 py-3">Description</th>
+                    <th class="px-4 py-3">Price</th>
+                    <th class="px-4 py-3">Stock</th>
+                    <th class="px-4 py-3">Last Updated</th>
                     <th class="px-4 py-3">Actions</th>
                   </tr>
                 </thead>
@@ -78,14 +74,11 @@ include '../php_function/authPage.php';
                         </div>
                         <div>
                           <p class="font-semibold">Nasi Ayam</p>
-                          <p class="text-xs text-gray-600 dark:text-gray-400">
-                            Khairul Azfar
-                          </p>
                         </div>
                       </div>
                     </td>
                     <td class="px-4 py-3 text-sm">
-                      1
+                      Sucullent braised chicken with fragrant rice
                     </td>
                     <td class="px-4 py-3 text-sm">
                       RM6.00
@@ -94,11 +87,11 @@ include '../php_function/authPage.php';
                       <span
                         class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
                       >
-                        Prepared
+                        12
                       </span>
                     </td>
                     <td class="px-4 py-3 text-sm">
-                      6/12/2023 8.30 A.M
+                      8.30 A.M
                     </td>
                     <td class="px-4 py-3">
                       <div class="flex items-center space-x-4 text-sm">
@@ -133,6 +126,11 @@ include '../php_function/authPage.php';
                               clip-rule="evenodd"
                             ></path>
                           </svg>
+                        </button>
+                        <button
+                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
+                          aria-label="Qr Code">
+                          <i class="fa-solid fa-qrcode"></i>
                         </button>
                       </div>
                     </td>
@@ -158,27 +156,24 @@ include '../php_function/authPage.php';
                         </div>
                         <div>
                           <p class="font-semibold">Nasi Lemak</p>
-                          <p class="text-xs text-gray-600 dark:text-gray-400">
-                            Juel Justine
-                          </p>
                         </div>
                       </div>
                     </td>
                     <td class="px-4 py-3 text-sm">
-                      2
+                      Traditional Malaysian Cuisine
                     </td>
                     <td class="px-4 py-3 text-sm">
-                      RM 12.00
+                      RM7.00
                     </td>
                     <td class="px-4 py-3 text-xs">
                       <span
                         class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600"
                       >
-                        Preparing
+                        3
                       </span>
                     </td>
                     <td class="px-4 py-3 text-sm">
-                      6/12/2023 7.30 A.M
+                      7.30 A.M
                     </td>
                     <td class="px-4 py-3">
                       <div class="flex items-center space-x-4 text-sm">
@@ -213,6 +208,11 @@ include '../php_function/authPage.php';
                               clip-rule="evenodd"
                             ></path>
                           </svg>
+                        </button>
+                        <button
+                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
+                          aria-label="Qr Code">
+                          <i class="fa-solid fa-qrcode"></i>
                         </button>
                       </div>
                     </td>
@@ -290,7 +290,7 @@ include '../php_function/authPage.php';
         </div>
       </main>
     </div>
-
+    
   </div>
 </body>
 
