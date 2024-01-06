@@ -138,7 +138,7 @@ include '../php_function/initdb.php';
                     <td class="px-4 py-3">
                       <div class="flex items-center space-x-4 text-sm">
                         <button
-                          data-modal-target="edit-menu-modal" data-modal-toggle="edit-menu-modal"
+                          data-modal-target="edit-menu-modal" data-modal-toggle="edit-menu-modal" data-menu-id="<?php echo $row['menu_id']; ?>"
                           class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
                           aria-label="Edit"
                         >
@@ -154,6 +154,7 @@ include '../php_function/initdb.php';
                           </svg>
                         </button>
                         <button
+                          data-modal-target="delete-menu-modal" data-modal-toggle="delete-menu-modal" data-menu-id="<?php echo $row['menu_id']; ?>"
                           class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
                           aria-label="Delete"
                         >
@@ -171,6 +172,7 @@ include '../php_function/initdb.php';
                           </svg>
                         </button>
                         <button
+                          data-modal-target="qr-menu-modal" data-modal-toggle="qr-menu-modal" data-menu-id="<?php echo $row['menu_id']; ?>"
                           class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
                           aria-label="Qr Code">
                           <i class="fa-solid fa-qrcode"></i>
