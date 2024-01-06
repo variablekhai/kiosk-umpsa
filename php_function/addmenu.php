@@ -1,26 +1,24 @@
 <?php
 
 include 'initdb.php';
+include 'authPage.php';
 
 $status = 'false';
 
-$sql = "SELECT a.kiosk_id FROM Kiosk a INNER JOIN Vendor v ON v.kiosk_id = a.kiosk_id WHERE v.user_id = " . $_SESSION['id'];
-$result = mysqli_query($conn, $sql);
+$menu_id = uniqid();
+$kiosk = $_SESSION['kiosk_id'];
+$name = $_POST['name'];
+$description = $_POST['description'];
+$price = $_POST['price'];
+$quantity = $_POST['quantity'];
+$menu_qr = '123456789';
 
-if($result){
-    $menu_id = uniqid();
-    $name = $_POST['addname'];
-    $price = $_POST['addprice'];
-    $quantity = $_POST['addquantity'];
-    $menu_qr = '123456789';
+$sql = "INSERT INTO Menu VALUES ('$menu_id', '$kiosk', '$name', $price, '$description', '$quantity', '$menu_qr')";
 
-    $sql = "INSERT INTO Menu (menu_id, kiosk_id, name, price, quantity_remaining, menu_qr) VALUES ('$menu_id', '$kiosk', '$name', '$price', '$quantity', '$menu_qr')";
-    $result = mysqli_query($conn, $sql);
-
-    if($result){
-        $status = 'true';
-    }
+if(mysqli_query($conn, $sql)){
+    $status = 'true';
 }
+
 $arr = array($status);
 echo json_encode($arr);
 
