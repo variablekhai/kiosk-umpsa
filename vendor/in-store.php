@@ -1,5 +1,16 @@
+<?php
+
+include '../php_function/initdb.php';
+//get all menu data in Menu table by using InPurchaseMenu menu_id as reference
+$query = "SELECT * FROM Menu m INNER JOIN InPurchaseMenu i ON m.menu_id = i.menu_id";
+$result = mysqli_query($conn, $query);
+$menu = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,13 +21,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <script src="https://replit.com/public/js/replit-badge-v2.js" theme="dark" position="bottom-right"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <script src="../jquery/jquery-3.7.1.min.js"></script>
 </head>
+
 <body class="poppins">
 
   <div class="flex items-center justify-center mt-8">
     <h1 class="text-center text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-700">Kiosk A</h1>
   </div>
-  
+
   <!-- Start Main Body -->
   <section class="my-12 max-w-screen-xl mx-auto px-6">
 
@@ -24,51 +37,49 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-12">
 
       <!-- Individual Food -->
-      <div
-        class="bg-white border border-gray-100 transition transform duration-700 hover:shadow-xl hover:scale-105 p-4 rounded-lg relative">
-        <img class="w-64 mx-auto transform transition duration-300 hover:scale-105"
-          src="https://png.pngtree.com/png-clipart/20231016/original/pngtree-top-view-hainanese-chicken-rice-served-on-a-plate-with-soup-png-image_13323477.png"
-          alt="" />
-        <div class="flex flex-col items-center my-3 space-y-2">
-          <h1 class="text-gray-900 text-lg">Nasi Ayam</h1>
-          <p class="text-gray-500 text-sm text-center">Succulent braised chicken meat with fragrant rice</p>
-          <h2 class="text-gray-900 text-2xl font-bold">RM12.00</h2>
-          <img src="https://www.investopedia.com/thmb/hJrIBjjMBGfx0oa_bHAgZ9AWyn0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/qr-code-bc94057f452f4806af70fd34540f72ad.png" class="w-1/2"/>
+      <?php foreach ($menu as $item) { ?>
+        <div class="bg-white border border-gray-100 transition transform duration-700 hover:shadow-xl hover:scale-105 p-4 rounded-lg relative">
+          <img class="w-64 mx-auto transform transition duration-300 hover:scale-105" src="<?php echo $item['image']; ?>" alt="" />
+          <div class="flex flex-col items-center my-3 space-y-2">
+            <h1 class="text-gray-900 text-lg"><?php echo $item['name']; ?></h1>
+            <p class="text-gray-500 text-sm text-center"><?php echo $item['description']; ?></p>
+            <h2 class="text-gray-900 text-2xl font-bold">RM<?php echo $item['price']; ?></h2>
+            <div class="qr-modal"></div>
+            <input type="hidden" class="menu-id" value="<?php echo $item['menu_id']; ?>">
+          </div>
         </div>
+      <?php } ?>
+      <!-- End Individual Food -->
       </div>
-
-      <!-- Individual Food -->
-      <div
-        class="bg-white border border-gray-100 transition transform duration-700 hover:shadow-xl hover:scale-105 p-4 rounded-lg relative">
-        <img class="w-64 mx-auto transform transition duration-300 hover:scale-105"
-        src="https://png.pngtree.com/png-clipart/20230320/original/pngtree-plate-with-tasty-waffles-png-image_8997543.png"
-        alt="" />
-        <div class="flex flex-col items-center my-3 space-y-2">
-          <h1 class="text-gray-900 text-lg">Waffle</h1>
-          <p class="text-gray-500 text-sm text-center">Crispy on the outside, chewy on the inside</p>
-          <h2 class="text-gray-900 text-2xl font-bold">RM4.00</h2>
-          <img src="https://www.investopedia.com/thmb/hJrIBjjMBGfx0oa_bHAgZ9AWyn0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/qr-code-bc94057f452f4806af70fd34540f72ad.png" class="w-1/2"/>
-        </div>
-      </div>
-
-      <!-- Individual Food -->
-      <div
-        class="bg-white border border-gray-100 transition transform duration-700 hover:shadow-xl hover:scale-105 p-4 rounded-lg relative">
-        <img class="mt-4 w-auto h-60 scale-105 mx-auto transform transition duration-300 hover:scale-110"
-          src="../assets/nasi_lemak.png" alt="" />
-        <div class="flex flex-col items-center my-3 space-y-2">
-          <h1 class="text-gray-900 text-lg">Nasi Lemak</h1>
-          <p class="text-gray-500 text-sm text-center">Malaysian traditional cuisine</p>
-          <h2 class="text-gray-900 text-2xl font-bold">RM12.00</h2>
-          <img src="https://www.investopedia.com/thmb/hJrIBjjMBGfx0oa_bHAgZ9AWyn0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/qr-code-bc94057f452f4806af70fd34540f72ad.png" class="w-1/2"/>
-        </div>
-      </div>
-
-     
 
       <!-- End Food Item -->
   </section>
   <!-- End Main Body -->
-  
+
 </body>
+
 </html>
+
+<script>
+  $(document).ready(function() {
+    $('.menu-id').each(function() {
+      var menuId = $(this).val();
+      var qrModal = $(this).siblings('.qr-modal');
+
+      $.ajax({
+        type: "POST",
+        url: "../php_function/generate_qr.php",
+        data: {
+          id: menuId
+        },
+        success: function(data) {
+          qrModal.html(`
+            <div class="flex flex-col items-center justify-center">
+              <img class="w-40 h-40" src="${data}" alt="QR Code">
+            </div>
+          `);
+        }
+      });
+    });
+  });
+</script>
