@@ -16,7 +16,7 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
         $_SESSION["password"] = $password;
         $_SESSION["name"] = $row["name"];
         $_SESSION["type"] = $row["user_type"];
-        if($row["user_type"] == 'vendor'){
+        if($row["user_type"] == 'Vendor'){
             $_SESSION['kiosk_id'] = $row["kiosk_id"];
         }
         $type = $row["user_type"];
