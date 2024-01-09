@@ -255,9 +255,9 @@ if (isset($_SESSION['membership_id'])) {
     $('#cardPayment').hide();
 
     $('input[type=radio][name=option]').change(function() {
-      if (this.value == 'online') {
+      if (this.value == 'Online') {
         $('#cardPayment').show();
-      } else if (this.value == 'cash') {
+      } else if (this.value == 'Cash') {
         $('#cardPayment').hide();
       }
     });
