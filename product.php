@@ -1,3 +1,28 @@
+<?php
+
+//get menuid from url
+$menuid = $_GET['id'];
+
+//get menu details from database
+include_once './php_function/initdb.php';
+$sql = "SELECT * FROM Menu WHERE menu_id = '$menuid'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+
+if (!$row) {
+  echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+  exit();
+}
+
+//get menu name
+$menu_name = $row['name'];
+$menu_price = $row['price'];
+$menu_desc = $row['description'];
+$menu_img = $row['image'];
+$kiosk_id = $row['kiosk_id'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +30,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiosk@UMPSA | Product Name</title>
+  <title>Kiosk@UMPSA | <?php echo $menu_name ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <script src="https://replit.com/public/js/replit-badge-v2.js" theme="dark" position="bottom-right"></script>
@@ -54,26 +79,25 @@
         <div class="flex flex-col justify-center">
           <h1
             class="text-center md:text-left lg:text-left text-3xl lg:text-4xl font-semibold poppins pb-4 text-gray-700 select-none">
-            Nasi Ayam</h1>
-          <p class="text-center md:text-left lg:text-left text-sm poppins text-gray-500 leading-relaxed select-none">Gay
-            one the what walk then she. Demesne mention promise you justice arrived way.Amazing foods are or and
-            increasing to in especially inquietude companions acceptance admiration.Outweigh it families distance
-            wandered ye..</p>
+            <?php echo $menu_name ?></h1>
+          <p class="text-center md:text-left lg:text-left text-sm poppins text-gray-500 leading-relaxed select-none"><?php echo $menu_desc ?></p>
           <div class="flex items-center justify-center md:justify-start lg:justify-start space-x-6 pt-8">
             <!-- Todo: Calculate price based on quantity added (price * quantity) -->
-            <h1 class="text-3xl font-bold text-black poppins select-none">RM 12.00</h1>
+            <h1 class="text-3xl font-bold text-black poppins select-none">RM <?php echo number_format($menu_price, 2) ?></h1>
 
             <!-- Quantity -->
             <div class="flex items-center border border-gray-200 px-4 py-2 space-x-6 rounded-full">
               <button
+                id="minus_quantity"
                 class="text-2xl bg-[#5B86FF] w-8 h-8 rounded-full text-white hover:scale-105 transform transition duration-500 cursor-pointer p-1 flex items-center justify-center">
                 <i class="fa-solid fa-minus fa-xs" style="color: #ffffff;"></i>
               </button>
 
 
-              <span className="text-lg text-gray-700 poppins select-none">1</span>
+              <span id="quantity" className="text-lg text-gray-700 poppins select-none">1</span>
 
               <button
+                id="add_quantity"
                 class="text-2xl bg-[#5B86FF] w-8 h-8 rounded-full text-white hover:scale-105 transform transition duration-500 cursor-pointer p-1 flex items-center justify-center">
                 <i class="fa-solid fa-plus fa-xs" style="color: #ffffff;"></i>
               </button>
@@ -93,8 +117,7 @@
 
         <!-- Right Side -->
         <div class="">
-            <img src="
-              https://png.pngtree.com/png-clipart/20231016/original/pngtree-top-view-hainanese-chicken-rice-served-on-a-plate-with-soup-png-image_13323477.png"
+            <img src="<?php echo $menu_img ?>"
               className="w-3/4 md:w-3/4 lg:w-full mx-auto" alt="food" />
           </div>
         </div>
@@ -109,17 +132,32 @@
 <script>
   // DO NOT DELETE I REPEAT DO NOT DELETE PLEASSEESAEASEASE
   $(document).ready(function() {
+
+    // Quantity
+    $('#add_quantity').click(function() {
+      var quantity = parseInt($('#quantity').text());
+      quantity++;
+      $('#quantity').text(quantity);
+    });
+
+    $('#minus_quantity').click(function() {
+      var quantity = parseInt($('#quantity').text());
+      if (quantity > 1) {
+        quantity--;
+        $('#quantity').text(quantity);
+      }
+    });
+
     $('#btnAddToCart').click(function() {
-      var menuId = 1;
-      var quantity = 1;
+      var quantity = parseInt($('#quantity').text());
 
       $.ajax({
         type: "POST",
         url: "./php_function/cartSession.php",
         data: {
-          menu_id: 'test123', //CHANGE THESE LATER AFTER INTEGRATING WITH REAL MENU
-          quantity: 3,
-          kiosk_id: '0'
+          menu_id: '<?php echo $menuid ?>',
+          quantity: quantity,
+          kiosk_id: '<?php echo $kiosk_id ?>'
         },
         success: function(data) {
           Swal.fire({
