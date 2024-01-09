@@ -38,11 +38,11 @@ $(document).ready(function() {
           <input id="email" placeholder="Email" name="email"
             class="w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
           
-          <input id="password" placeholder="Password" name="password"
+          <input id="password" placeholder="Password" name="password" type="password"
             class="w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
 
           <span id="errorMsg" class="text-[#FF6B6B]">Insert email and password</span>
-          <span id="invalidMsg" class="text-[#FF6B6B]">Invalid email or password</span>
+          <span id="invalidMsg" class="text-[#FF6B6B]"></span>
 
           <button id="btnSignIn"
             class="w-full py-3 bg-[#5B86FF] text-white ring-[#abc1ff] focus:outline-none focus:ring-4 mt-6 rounded-lg transition duration-300 poppins">Sign
@@ -78,13 +78,18 @@ $("#btnSignIn").click(function(e) {
     var formData = $("#signIn").serialize();
     $.post("php_function/signinProcess.php", formData, function(result) {
       result = $.parseJSON(result)
-      console.log(result)
       if (result[0] == 'true') {
         if (result[1] == 'User') location.href = "index"
         if (result[1] == 'Vendor') location.href = "index"
         if (result[1] == 'Admin') location.href = "admin/dashboard"
       }
       else {
+        if(result[1] == 'Vendor' && result[0] == 'Pending') {
+          $("#invalidMsg").text("Your account is not yet verified")
+        }
+        else {
+          $("#invalidMsg").text("Invalid email or password")
+        }
         $("#invalidMsg").show()
       }
     });
