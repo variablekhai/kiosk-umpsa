@@ -1,7 +1,28 @@
 <?php
 include '../php_function/authPage.php';
-include '../php_function/order.php';
+include '../php_function/initdb.php';
+session_start();
+
+$sql = "SELECT o.*, oi.*, m.* FROM `Order` o
+INNER JOIN OrderItem oi
+ON o.order_id = oi.order_id
+INNER JOIN Menu m
+ON oi.menu_id = m.menu_id
+WHERE o.user_id = '".$_SESSION['id']."'";
+
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    die("Error executing query: " . mysqli_error($conn));
+}
+
+$orders = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
 ?>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +38,9 @@ include '../php_function/order.php';
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+  <script src="../jquery/jquery-3.7.1.min.js"></script>
 
   <!-- Flowbite CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css"  rel="stylesheet" />
@@ -25,7 +49,11 @@ include '../php_function/order.php';
 <body class="poppins">
   <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
     <!-- Sidebar -->
-    <?php include 'sidebar.php' ?>
+    <?php include 'sidebar.php';
+          include './components/qr-order-modal.php';
+          include './components/cancel-order-modal.php';
+          include './components/edit-order-modal.php';
+    ?>
 
     <!-- Main Body -->
     <div class="flex flex-col flex-1 w-full">
@@ -54,55 +82,55 @@ include '../php_function/order.php';
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y">
-                <!-- Order List -->
-                <?php
 
-                // $allorder = allOrder();
-                // while($row = mysqli_fetch_all($allorder))
-                // {
-                ?>
-                  <tr class="text-gray-700">
+                <?php foreach ($orders as $order) { ?>
+                  <tr class="text-gray-700 dark:text-gray-400">
                     <td class="px-4 py-3">
                       <div class="flex items-center text-sm">
                         <!-- Avatar with inset shadow -->
                         <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                          <!-- <img class="object-cover w-full h-full rounded-full"
-                            src="https://png.pngtree.com/png-clipart/20231016/original/pngtree-top-view-hainanese-chicken-rice-served-on-a-plate-with-soup-png-image_13323477.png"
-                            alt="" loading="lazy" /> -->
+                          <img class="object-cover w-full h-full rounded-full" src="<?php echo $order['image'] ?>" alt=""
+                            loading="lazy" />
                           <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
                         </div>
                         <div>
-                          <p class="font-semibold">
-                            <?php //$row['name']; ?>
-                          </p>
+                          <p class="font-semibold"><?php echo $order['name'] ?></p>
                           <p class="text-xs text-gray-600 dark:text-gray-400">
-                            
+                            <?php echo $_SESSION['name'] ?>
                           </p>
                         </div>
                       </div>
                     </td>
                     <td class="px-4 py-3 text-sm">
-                      <!-- 1 -->
+                      <?php echo $order['quantity'] ?>
                     </td>
                     <td class="px-4 py-3 text-sm">
-                      <!-- RM6.00 -->
+                      RM <?php echo number_format($order['price'] * $order['quantity'], 2) ?>
                     </td>
                     <td class="px-4 py-3 text-xs">
-                      <span
-                        class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                        <!-- Prepared -->
-                      </span>
+                      <?php if ($order['status'] == 'Prepared') { ?>
+                        <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                          Prepared
+                        </span>
+                      <?php } else if ($order['status'] == 'Ordered'){ ?>
+                        <span class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
+                          <?php echo $order['status'] ?>
+                        </span>
+                      <?php } else {  ?>
+                        <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-white dark:bg-red-600">
+                          <?php echo $order['status'] ?>
+                        </span>
+                      <?php } ?>
                     </td>
                     <td class="px-4 py-3 text-sm">
-                      <!-- 6/12/2023 8.30 A.M -->
+                      <?php echo date('d/m/Y h:i A', strtotime($order['date_created'])); ?>
                     </td>
-                    <!-- Button For Edit, Cancel, QR  -->
                     <td class="px-4 py-3">
                       <div class="flex items-center space-x-4 text-sm">
-                        <!-- Edit Order -->
+                        <?php if ($order['status'] == 'Ordered') { ?>
                         <button
-                          data-modal-target="edit-modal" data-modal-toggle="edit-modal"
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg edt"
+                         data-order-id="<?= $order['order_id'] ?>" data-modal-target="edit-order-modal" data-modal-toggle="edit-order-modal"
+                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
                           aria-label="Edit">
                           <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                             <path
@@ -110,39 +138,27 @@ include '../php_function/order.php';
                             </path>
                           </svg>
                         </button>
-                        <!-- Delete Order -->
-                        <button
-                          data-modal-target="cancel-modal" data-modal-toggle="cancel-modal"
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
-                          aria-label="Delete">
-                          <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                              clip-rule="evenodd"></path>
-                          </svg>
-                        </button>
-                        <!-- QR code Order -->
-                        <button
-                          data-modal-target="qr-modal" data-modal-toggle="qr-modal"
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
-                          aria-label="Qr Code">
-                          <i class="fa-solid fa-qrcode"></i>
-                        </button>
+                        <button data-order-id="<?= $order['order_id'] ?>" data-modal-target="cancel-order-modal" data-modal-toggle="cancel-order-modal" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg" aria-label="Delete">
+                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                          </button>
+                        <?php } ?>
+                        <button data-order-id="<?= $order['order_id'] ?>" data-modal-target="qr-modal" data-modal-toggle="qr-modal" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg" aria-label="Qr Code">
+                            <i class="fa-solid fa-qrcode"></i>
+                          </button>
                       </div>
                     </td>
                   </tr>
-                <?php
-                // }
-                ?>
+                <?php } ?>
+
                 </tbody>
               </table>
             </div>
-
-            <!-- Amount of order per page -->
             <div
               class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
               <span class="flex items-center col-span-3">
-                Showing 2 of 2
+                Showing <?php echo count($orders) ?> of <?php echo count($orders) ?>
               </span>
               <span class="col-span-2"></span>
               <!-- Pagination -->
@@ -165,13 +181,6 @@ include '../php_function/order.php';
                         1
                       </button>
                     </li>
-                    <!-- <li>
-                      <button
-                        class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
-                      >
-                        2
-                      </button>
-                    </li> -->
                     <li>
                       <button class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
                         aria-label="Next">
@@ -186,141 +195,11 @@ include '../php_function/order.php';
                 </nav>
               </span>
             </div>
-            <!-- End of Pagination -->
-
-            <!-- Put the modal here-->
-
-            <!-- Edit Modal -->
-            <div id="edit-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-                <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-                    <!-- Modal content -->
-                    <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                        <!-- Modal header -->
-                        <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                Edit Order
-                            </h3>
-                            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="edit-modal">
-                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                                <span class="sr-only">Close modal</span>
-                            </button>
-                        </div>
-                        <!-- Modal body -->
-                        <form action="#" method="post">
-                            <div class="grid gap-4 mb-4 sm:grid-cols-2">
-                                <div>
-                                    <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
-                                    <input type="number" name="quantity" id="quantity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="0" required="">
-                                </div>
-                            </div>
-                            <button type="submit" class="text-black inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                                Edit Order
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cancel Modal -->
-            <div id="cancel-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <div class="relative p-4 w-full max-w-2xl max-h-full">
-                    <!-- Modal content -->
-                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                        <!-- Modal header -->
-                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                Cancel Order?
-                            </h3>
-                            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="cancel-modal">
-                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                                </svg>
-                                <span class="sr-only">Close modal</span>
-                            </button>
-                        </div>
-                        <!-- Modal body -->
-                        <div class="p-4 md:p-5 space-y-4">
-                            <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                                Cancel Order for the item ...
-                            </p>
-                        </div>
-                        <!-- Modal footer -->
-                        <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                            <button data-modal-hide="cancel-modal" type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Yes</button>
-                            <button data-modal-hide="cancel-modal" type="button" class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- QR Modal -->
-            <div id="qr-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-                <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-                    <!-- Modal content -->
-                    <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                        <!-- Modal header -->
-                        <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                QR Order
-                            </h3>
-                            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="qr-modal">
-                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                                <span class="sr-only">Close modal</span>
-                            </button>
-                        </div>
-                        <!-- Modal body -->
-                        
-                        <div class="grid gap-4 mb-4 sm:grid-cols-2">
-                            <div>
-                                <label for="qrcode" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">QR Code</label>
-                                <img src="...">
-                            </div>
-                        </div>
-                        <button type="button" class="text-black inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" data-modal-toggle="qr-modal">
-                            Close QR
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- End of the modal -->
-
           </div>
         </div>
       </main>
     </div>
-  </div>
-
-  <!-- Jquery Link -->
-  <script src="../jquery/jquery-3.7.1.min.js" ></script>
-
-  <!-- Jquery Stuff -->
-  <script>
-    //Cancel Ajax
-    function cancelOrder(id) {
-        $.ajax({
-            url: "../php_function/order.php?method=cancel&id="+id,
-            type: 'POST',
-            success: function(){
-                location.href = "../user/orders.php"
-            }
-        })
-    }
-    //Cancel Trigger
-    $('.cancel').click(function(){
-        var id = $(this).data('id');
-        cancelOrder(id);
-    });
-
-    $('.edt').click(function(){
-        $('#quantity').val(2);
-    })
-
-  </script>
-  <!-- Flowbite JS-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    
 </body>
 
 </html>

@@ -12,14 +12,14 @@ $description = $_POST['description'];
 $price = $_POST['price'];
 $quantity = $_POST['quantity'];
 $menu_qr = '123456789';
+$date = date("Y-m-d H:i:s");
 
-$sql = "INSERT INTO Menu VALUES ('$menu_id', '$kiosk', '$name', $price, '$description', '$quantity', '$menu_qr')";
+$sql = "INSERT INTO Menu VALUES ('$menu_id', '$kiosk', '$name', $price, '$description', '$quantity', '$menu_qr', '$date')";
 
 if(mysqli_query($conn, $sql)){
     $status = 'true';
 }
 
-$arr = array($status);
-echo json_encode($arr);
+echo $status;
 
 ?>
