@@ -38,6 +38,9 @@ $orders = mysqli_fetch_all($result, MYSQLI_ASSOC);
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+  <script src="../jquery/jquery-3.7.1.min.js"></script>
 
   <!-- Flowbite CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css"  rel="stylesheet" />
@@ -46,7 +49,11 @@ $orders = mysqli_fetch_all($result, MYSQLI_ASSOC);
 <body class="poppins">
   <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
     <!-- Sidebar -->
-    <?php include 'sidebar.php' ?>
+    <?php include 'sidebar.php';
+          include './components/qr-order-modal.php';
+          include './components/cancel-order-modal.php';
+          include './components/edit-order-modal.php';
+    ?>
 
     <!-- Main Body -->
     <div class="flex flex-col flex-1 w-full">
@@ -105,8 +112,12 @@ $orders = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
                           Prepared
                         </span>
-                      <?php } else { ?>
+                      <?php } else if ($order['status'] == 'Ordered'){ ?>
                         <span class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
+                          <?php echo $order['status'] ?>
+                        </span>
+                      <?php } else {  ?>
+                        <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-white dark:bg-red-600">
                           <?php echo $order['status'] ?>
                         </span>
                       <?php } ?>
@@ -116,7 +127,9 @@ $orders = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     </td>
                     <td class="px-4 py-3">
                       <div class="flex items-center space-x-4 text-sm">
+                        <?php if ($order['status'] == 'Ordered') { ?>
                         <button
+                         data-order-id="<?= $order['order_id'] ?>" data-modal-target="edit-order-modal" data-modal-toggle="edit-order-modal"
                           class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
                           aria-label="Edit">
                           <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
@@ -125,20 +138,15 @@ $orders = mysqli_fetch_all($result, MYSQLI_ASSOC);
                             </path>
                           </svg>
                         </button>
-                        <button
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
-                          aria-label="Delete">
-                          <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                              clip-rule="evenodd"></path>
-                          </svg>
-                        </button>
-                        <button
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
-                          aria-label="Qr Code">
-                          <i class="fa-solid fa-qrcode"></i>
-                        </button>
+                        <button data-order-id="<?= $order['order_id'] ?>" data-modal-target="cancel-order-modal" data-modal-toggle="cancel-order-modal" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg" aria-label="Delete">
+                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                          </button>
+                        <?php } ?>
+                        <button data-order-id="<?= $order['order_id'] ?>" data-modal-target="qr-modal" data-modal-toggle="qr-modal" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg" aria-label="Qr Code">
+                            <i class="fa-solid fa-qrcode"></i>
+                          </button>
                       </div>
                     </td>
                   </tr>
