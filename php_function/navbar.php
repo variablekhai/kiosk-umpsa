@@ -29,6 +29,7 @@ if (isset($_SESSION['name']) && isset($_SESSION['email'])) {
           </div>
           <!-- Right Side -->
           <div class="flex items-center justify-end space-x-6">
+            <a href='orders.php'><i class="fa-solid fa-shopping-cart fa-lg"></i></a>
             <div class="relative">
               <div class="rounded-full overflow-hidden">
                 <img class="w-10 h-10 object-cover" src="$image" alt="Profile image" onclick="toggleDropdown()">

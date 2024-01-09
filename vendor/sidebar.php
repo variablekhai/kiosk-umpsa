@@ -15,7 +15,7 @@
               echo '<span class="absolute inset-y-0 left-0 w-1 bg-primary rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>';
             } 
             ?>
-            <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+            <a class="inline-flex items-center w-full text-sm font-semibold <?= $page === 'dashboard.php' ? 'text-gray-800' : '' ?> transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
               href="dashboard">
               <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
                 stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
@@ -34,7 +34,7 @@
               echo '<span class="absolute inset-y-0 left-0 w-1 bg-primary rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>';
             } 
             ?>
-            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+            <a class="inline-flex items-center w-full text-sm font-semibold <?= $page === 'menu.php' ? 'text-gray-800' : '' ?> transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
               href="menu">
               <i class="fa-solid fa-utensils"></i>
               <span class="ml-4">Manage Menu</span>
@@ -49,7 +49,7 @@
                 echo '<span class="absolute inset-y-0 left-0 w-1 bg-primary rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>';
               } 
               ?>
-              <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              <a class="inline-flex items-center w-full text-sm font-semibold <?= $page === 'orders.php' ? 'text-gray-800' : '' ?> transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="orders">
                 <i class="fa-solid fa-list"></i>
                 <span class="ml-4">Orders</span>
@@ -63,7 +63,7 @@
               echo '<span class="absolute inset-y-0 left-0 w-1 bg-primary rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>';
             } 
             ?>
-              <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              <a class="inline-flex items-center w-full text-sm font-semibold <?= $page === 'in-store-menu.php' ? 'text-gray-800' : '' ?> transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="in-store-menu">
                 <i class="fa-solid fa-utensils"></i>
                 <span class="ml-4">In-Store Menu</span>
@@ -77,7 +77,7 @@
                 echo '<span class="absolute inset-y-0 left-0 w-1 bg-primary rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>';
               } 
               ?>
-              <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              <a class="inline-flex items-center w-full text-sm font-semibold <?= $page === 'in-store.php' ? 'text-gray-800' : '' ?> transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="in-store">
                 <i class="fa-solid fa-store"></i>
                 <span class="ml-4">In-Store Page</span>

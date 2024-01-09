@@ -22,6 +22,13 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
         $type = $row["user_type"];
         $_SESSION["image"] = $row["image"];
         $status = 'true';
+
+        $membership_query = "SELECT * FROM Membership m INNER JOIN User u WHERE m.membership_id = u.membership_id AND u.user_id = '" . $_SESSION['id'] . "'";
+        $membership_result = mysqli_query($conn, $membership_query);
+        $membership = mysqli_fetch_assoc($membership_result);
+
+        $_SESSION['membership_id'] = $membership['membership_id'];
+
     }
     $arr = array($status, $type);
     echo json_encode($arr);

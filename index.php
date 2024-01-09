@@ -70,7 +70,7 @@
           <h2 class="text-gray-900 text-2xl font-bold">RM12.00</h2>
           <h6 class="text-[#5B86FF] text-sm text-center">11 in stock</h6>
           <button
-            onclick="window.location.href='product.html'"
+            onclick="window.location.href='product.php'"
             class="bg-[#5B86FF] text-white px-8 py-2 focus:outline-none rounded-full mt-24 transform transition duration-300 hover:scale-105">Order
             Now</button>
         </div>
