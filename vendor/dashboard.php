@@ -15,6 +15,9 @@
   <script src="../assets/js/charts-lines.js" defer></script>
   <script src="../assets/js/charts-pie.js" defer></script>
   <script src="../jquery/jquery-3.7.1.min.js"></script>
+  <script>
+    
+  </script>
 </head>
 
 <body class="poppins">
