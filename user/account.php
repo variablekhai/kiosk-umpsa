@@ -91,6 +91,7 @@ if(mysqli_num_rows($points_result) > 0) {
               <div>
                 <form id="updateForm" class="w-full flex flex-col space-y-4">
                   <input id="id" name="id" class="hidden" value="<?php echo $id; ?>" />
+                  <img class="w-64 h-64" src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg">
                   <input id="name" name="name" placeholder="Name"
                     value="<?php echo $userName; ?>"
                     class="w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
@@ -127,6 +128,25 @@ if(mysqli_num_rows($points_result) > 0) {
 
 </html>
 <script>
+
+  // $.document.ready(function() {
+  //     $.ajax({
+  //       type: "POST",
+  //       url: "../php_function/generate_qr.php",
+  //       data: {
+  //           id: <?php echo $id ?>
+  //       },
+  //       success: function(data) {
+  //         console.log(data)
+  //           // $('#qr-modal').html(`
+  //           //     <div class="flex flex-col items-center justify-center">
+  //           //         <img class="w-40 h-40" src="${data}" alt="User QR Code">
+  //           //     </div>
+  //           // `);
+  //       }
+  //     });
+  //   })
+
   $("#updateBtn").click(function(e) {
     e.preventDefault();
     var id = $("#id").val()
@@ -160,5 +180,4 @@ if(mysqli_num_rows($points_result) > 0) {
     }
     
   });
-
 </script>

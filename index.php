@@ -111,7 +111,7 @@ if (isset($_GET['kiosk_id'])) {
         ?>
         <span
           class="text-[#5B86FF] bg-[#d5e0ff] border border-[#5B86FF] rounded-full text-primary text-sm poppins px-4 py-1 inline-block mb-4 "><?php echo $kiosk_name ?></span>
-        <img class="w-64 mx-auto transform transition duration-300 hover:scale-105"
+        <img class="w-64 h-64 mx-auto transform transition duration-300 hover:scale-105"
           src="<?php echo $menu['image'] ?>"
           alt="" />
         <div class="flex flex-col items-center my-3 space-y-2">
