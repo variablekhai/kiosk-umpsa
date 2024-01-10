@@ -125,7 +125,7 @@ include '../php_function/initdb.php';
                     <td class="px-4 py-3">
                       <div class="flex items-center space-x-4 text-sm">
                         <button
-                          data-modal-target="edit-order-modal" data-model-toggle="edit-order-modal" data-order-id="<?php echo $row['id']; ?>"
+                          data-modal-target="edit-order-modal" data-modal-toggle="edit-order-modal" data-order-id="<?php echo $row['id']; ?>"
                           class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
                           aria-label="Edit"
                         >
@@ -141,7 +141,7 @@ include '../php_function/initdb.php';
                           </svg>
                         </button>
                         <button
-                          data-modal-target="delete-order-modal" data-model-toggle="delete-order-modal" data-order-id="<?php echo $row['id']; ?>"
+                          data-modal-target="delete-order-modal" data-modal-toggle="delete-order-modal" data-order-id="<?php echo $row['id']; ?>"
                           class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
                           aria-label="Delete"
                         >
@@ -247,7 +247,7 @@ include '../php_function/initdb.php';
 
 </html>
 <script>
-  $("button[data-modal-target='edi-order-modal']").click(function() {
+  $("button[data-modal-target='edit-order-modal']").click(function() {
     var orderId = $(this).data('order-id');
     $("#edit-order-modal").data('order-id', orderId);
   });
