@@ -41,9 +41,11 @@
           </li>
         </ul>
         <div class="px-6 my-6">
-          <button class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-primary border border-transparent rounded-full focus:outline-none">
+          <button id="btnLogout" onclick="location.href = '../php_function/logoutProcess.php'"
+            class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-primary border border-transparent rounded-full focus:outline-none">
             Logout
-            <span class="ml-2" aria-hidden="true"><i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></i></span>
+          <span class="ml-2" aria-hidden="true"><i class="fa-solid fa-right-from-bracket"
+                style="color: #ffffff;"></i></span>
           </button>
         </div>
       </div>
