@@ -1,5 +1,6 @@
 <?php
 include '../php_function/authPage.php';
+include '../php_function/initdb.php';
 ?>
 
 <!DOCTYPE html>
@@ -18,12 +19,21 @@ include '../php_function/authPage.php';
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
   <script src="../assets/js/charts-lines.js" defer></script>
   <script src="../assets/js/charts-pie.js" defer></script>
+
+  <!-- Flow Bite Link And Jquery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+  <script src="../jquery/jquery-3.7.1.min.js"></script>
 </head>
 
 <body class="poppins">
   <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
     <!-- Sidebar -->
-    <?php include('sidebar.php') ?>
+    <?php 
+    include('sidebar.php');
+    include './components/edit-order-modal.php';
+    include './components/delete-order-modal.php';
+     ?>
 
     <!-- Main Body -->
     <div class="flex flex-col flex-1 w-full">
@@ -58,6 +68,18 @@ include '../php_function/authPage.php';
                 <tbody
                   class="bg-white divide-y"
                 >
+                <!-- Order list based on order item-->
+                <?php
+                
+                $sql = "SELECT oi.id, o.name AS user, m.name, m.image, oi.quantity, o.total, o.status, o.date_created FROM OrderItem oi INNER JOIN Menu m INNER JOIN `Order` o
+                          ON oi.menu_id = m.menu_id AND oi.order_id = o.order_id
+                            WHERE oi.kiosk_id = ".$_SESSION['kiosk_id']." AND o.status != 'Cancelled';";
+                
+                $result = mysqli_query($conn, $sql);
+
+                while($row = mysqli_fetch_assoc($result)){
+                ?>
+
                   <tr class="text-gray-700">
                     <td class="px-4 py-3">
                       <div class="flex items-center text-sm">
@@ -67,7 +89,7 @@ include '../php_function/authPage.php';
                         >
                           <img
                             class="object-cover w-full h-full rounded-full"
-                            src="https://png.pngtree.com/png-clipart/20231016/original/pngtree-top-view-hainanese-chicken-rice-served-on-a-plate-with-soup-png-image_13323477.png"
+                            src="<?php echo $row['image']; ?>"
                             alt=""
                             loading="lazy"
                           />
@@ -77,32 +99,33 @@ include '../php_function/authPage.php';
                           ></div>
                         </div>
                         <div>
-                          <p class="font-semibold">Nasi Ayam</p>
+                          <p class="font-semibold"><?php echo $row['name']; ?></p>
                           <p class="text-xs text-gray-600 dark:text-gray-400">
-                            Khairul Azfar
+                            <?php echo $row['user']; ?>
                           </p>
                         </div>
                       </div>
                     </td>
                     <td class="px-4 py-3 text-sm">
-                      1
+                    <?php echo $row['quantity']; ?> 
                     </td>
                     <td class="px-4 py-3 text-sm">
-                      RM6.00
+                      <?php echo "RM " . $row['total']; ?>
                     </td>
                     <td class="px-4 py-3 text-xs">
                       <span
                         class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
                       >
-                        Prepared
+                      <?php echo $row['status']; ?>
                       </span>
                     </td>
                     <td class="px-4 py-3 text-sm">
-                      6/12/2023 8.30 A.M
+                      <?php echo $row['date_created']; ?>
                     </td>
                     <td class="px-4 py-3">
                       <div class="flex items-center space-x-4 text-sm">
                         <button
+                          data-modal-target="edit-order-modal" data-model-toggle="edit-order-modal" data-order-id="<?php echo $row['id']; ?>"
                           class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
                           aria-label="Edit"
                         >
@@ -118,6 +141,7 @@ include '../php_function/authPage.php';
                           </svg>
                         </button>
                         <button
+                          data-modal-target="delete-order-modal" data-model-toggle="delete-order-modal" data-order-id="<?php echo $row['id']; ?>"
                           class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
                           aria-label="Delete"
                         >
@@ -138,86 +162,9 @@ include '../php_function/authPage.php';
                     </td>
                   </tr>
 
-                  <tr class="text-gray-700 dark:text-gray-400">
-                    <td class="px-4 py-3">
-                      <div class="flex items-center text-sm">
-                        <!-- Avatar with inset shadow -->
-                        <div
-                          class="relative hidden w-8 h-8 mr-3 rounded-full md:block"
-                        >
-                          <img
-                            class="object-cover w-full h-full rounded-full"
-                            src="../assets/nasi_lemak.png"
-                            alt=""
-                            loading="lazy"
-                          />
-                          <div
-                            class="absolute inset-0 rounded-full shadow-inner"
-                            aria-hidden="true"
-                          ></div>
-                        </div>
-                        <div>
-                          <p class="font-semibold">Nasi Lemak</p>
-                          <p class="text-xs text-gray-600 dark:text-gray-400">
-                            Juel Justine
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="px-4 py-3 text-sm">
-                      2
-                    </td>
-                    <td class="px-4 py-3 text-sm">
-                      RM 12.00
-                    </td>
-                    <td class="px-4 py-3 text-xs">
-                      <span
-                        class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600"
-                      >
-                        Preparing
-                      </span>
-                    </td>
-                    <td class="px-4 py-3 text-sm">
-                      6/12/2023 7.30 A.M
-                    </td>
-                    <td class="px-4 py-3">
-                      <div class="flex items-center space-x-4 text-sm">
-                        <button
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
-                          aria-label="Edit"
-                        >
-                          <svg
-                            class="w-5 h-5"
-                            aria-hidden="true"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
-                            ></path>
-                          </svg>
-                        </button>
-                        <button
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
-                          aria-label="Delete"
-                        >
-                          <svg
-                            class="w-5 h-5"
-                            aria-hidden="true"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                              clip-rule="evenodd"
-                            ></path>
-                          </svg>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-
+                  <?php
+                  }
+                  ?>
                 </tbody>
               </table>
             </div>
@@ -300,7 +247,8 @@ include '../php_function/authPage.php';
 
 </html>
 <script>
-  $('#addBtn'),click(function(){
-
+  $("button[data-modal-target='edi-order-modal']").click(function() {
+    var orderId = $(this).data('order-id');
+    $("#edit-order-modal").data('order-id', orderId);
   });
 </script>

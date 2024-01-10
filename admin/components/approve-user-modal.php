@@ -1,14 +1,30 @@
+<?php 
+// Prepare the SQL query
+$query = "SELECT k.* FROM Kiosk k LEFT JOIN Vendor v ON k.kiosk_id = v.kiosk_id WHERE v.kiosk_id IS NULL";
+
+
+$kiosks = [];
+// Execute the query
+$result = mysqli_query($conn, $query);
+// Fetch the row
+while($row = mysqli_fetch_assoc($result)) {
+    $kiosks[] = $row;
+}
+
+?>
 <!-- Approve user modal -->
 <script>
     $(document).ready(function() {
         $('[data-modal-toggle="approve-user-modal"]').click(function() {
             var userId = $(this).data('user-id');
+            var kioskId = $("#kiosk-select").val();
             $('#approve-user-submit').click(function() {
                 $.ajax({
                     type: "POST",
                     url: "../php_function/approveUserProcess.php",
                     data: {
-                        id: userId
+                        id: userId,
+                        kioskId: kioskId
                     },
                     success: function(data) {
                         if (data == "true") {
@@ -37,6 +53,22 @@
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                 </svg>
                 <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to approve this user?</h3>
+                <div class="grid gap-4 mb-4 grid-cols-2">
+                    <div class="col-span-2">
+                        <label for="name-edit" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kiosk</label>
+                        <select name="kiosk" id="kiosk-select" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                        <?php
+                        foreach($kiosks as $kiosk) {
+                            $id = $kiosk['kiosk_id'];
+                            $location = $kiosk['location'];
+                            echo <<<HTML
+                            <option value="$id">$location</option>
+                            HTML;
+                        }
+                        ?>
+                        </select>
+                    </div>
+                </div>
                 <button id="approve-user-submit" data-modal-hide="approve-user-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
                     Yes, I'm sure
                 </button>

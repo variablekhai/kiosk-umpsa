@@ -5,7 +5,7 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
     $type = '';
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $sql = "SELECT u.*, v.kiosk_id FROM User u LEFT JOIN Vendor v ON u.user_id = v.user_id WHERE username='$email' AND password='$password'";
+    $sql = "SELECT u.*, v.kiosk_id, v.status FROM User u LEFT JOIN Vendor v ON u.user_id = v.user_id WHERE username='$email' AND password='$password'";
     $result = mysqli_query($conn, $sql);
     if(mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
@@ -22,6 +22,9 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
         $type = $row["user_type"];
         $_SESSION["image"] = $row["image"];
         $status = 'true';
+        if($row["status"] == 'Pending') {
+            $status = 'Pending';
+        }
 
         $membership_query = "SELECT * FROM Membership m INNER JOIN User u WHERE m.membership_id = u.membership_id AND u.user_id = '" . $_SESSION['id'] . "'";
         $membership_result = mysqli_query($conn, $membership_query);

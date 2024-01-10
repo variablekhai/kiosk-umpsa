@@ -138,15 +138,18 @@ if (mysqli_num_rows($result) > 0) {
                           <?php
                           if ($user['user_type'] === 'Vendor') {
                             if ($vendorStatus === 'Pending') {
-                              echo '<button
-                                    data-user-id="' . $user['user_id'] . '"
+                              $uID = $user['user_id'];
+                              echo <<<HTML
+                                  <button
+                                    data-user-id="$uID"
                                     data-modal-target="approve-user-modal"
                                     data-modal-toggle="approve-user-modal" 
                                     class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
                                     aria-label="Approve"
                                     > 
                                       <i class="fa-solid fa-check" style="color: #5B86FF;"></i>
-                                  </button>';
+                                  </button>
+                              HTML;
                             }
                           }
                           ?>
