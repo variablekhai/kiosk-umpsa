@@ -8,7 +8,7 @@ if (isset($_POST['name']) && isset($_POST['password'])) {
   $password = $_POST['password'];
   $image = $_POST['image'];
 
-  $sql = "UPDATE User SET name='$name', password='$password', image='$image' WHERE user_id='$id'";
+  $sql = "UPDATE `User` SET name='$name', password='$password', image='$image' WHERE user_id='$id'";
 
   $result = mysqli_query($conn, $sql);
 
@@ -19,12 +19,12 @@ if (isset($_POST['name']) && isset($_POST['password'])) {
 
   if (mysqli_affected_rows($conn) > 0) {
     $status = 'true';
-    
-    if (strpos($_SERVER['HTTP_REFERER'], 'user-management.php') !== false) {
-      $_SESSION['name'] = $name;
-      $_SESSION['password'] = $password;
-      $_SESSION['image'] = $image;
-    }
+    $_SESSION['name'] = $name;
+    $_SESSION['password'] = $password;
+    $_SESSION['image'] = $image;
+    // if (strpos($_SERVER['HTTP_REFERER'], 'user-management.php') !== false) {
+      
+    // }
     
   } else {
     $status = 'false';

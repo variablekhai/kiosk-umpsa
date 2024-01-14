@@ -91,7 +91,7 @@ if(mysqli_num_rows($points_result) > 0) {
               <div>
                 <form id="updateForm" class="w-full flex flex-col space-y-4">
                   <input id="id" name="id" class="hidden" value="<?php echo $id; ?>" />
-                  <img class="w-64 h-64" src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg">
+                  <img id="userqr" class="w-64 h-64" src="">
                   <input id="name" name="name" placeholder="Name"
                     value="<?php echo $userName; ?>"
                     class="w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
@@ -119,7 +119,6 @@ if(mysqli_num_rows($points_result) > 0) {
           </div>
         </div>
     </div>
-    <img src="<?php generateQR($user_id); ?>" alt=""/>
     </main>
   </div>
 
@@ -147,6 +146,20 @@ if(mysqli_num_rows($points_result) > 0) {
   //     });
   //   })
 
+  $(document).ready(function() {
+    var userID = '<?php echo $id; ?>';
+    $.ajax({
+      type: "POST",
+      url: "../php_function/generate_qr.php",
+      data: {
+        id: userID
+      },
+      success: function(data) {
+        $('#userqr').attr("src",data);
+      }
+    });      
+  });
+
   $("#updateBtn").click(function(e) {
     e.preventDefault();
     var id = $("#id").val()
@@ -168,10 +181,7 @@ if(mysqli_num_rows($points_result) > 0) {
         }
         console.log("result", result)
         if (result[0] == 'true') {
-          location.href = "account"
-          $("#name").val(result[1]);
-          $("#password").val(result[2]);
-          $("#image").val(result[3]);
+          location.reload()
         }
       });
     }
