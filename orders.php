@@ -223,8 +223,8 @@ include './php_function/initdb.php';
     var totalPrice = <?php echo $totalPrice ?>;
     var totalPointsEarned = <?php echo $totalPointsEarned ?>;
     var totalPointsUsed = $('#points').val() ? $('#points').val() : 0;
-    var membership_id = '<?php echo $membership_id ?>';
-    var user_id = '<?php echo $_SESSION['id'] ?>';
+    var membership_id = '<?php echo isset($membership_id) ? $membership_id : ""; ?>';
+    var user_id = '<?php echo isset($_SESSION['id']) ? $_SESSION['id'] : "" ?>';
 
     //Send order request
     $.ajax({
@@ -276,7 +276,7 @@ include './php_function/initdb.php';
 
   $('#points').on('input', function() {
     var points = $(this).val();
-    var availablePoints = <?php echo $points ?>;
+    var availablePoints = <?php echo isset($points) ? $points : 0 ?>;
 
     // Check if the entered points exceed the available points
     if (points > availablePoints) {
