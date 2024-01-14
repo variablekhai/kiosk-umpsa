@@ -284,7 +284,7 @@ include './php_function/initdb.php';
               if (!inpurchase) {
                 window.location.href = './user/orders.php';
               } else {
-                window.location.href = './scanqr.php';
+                window.location.href = './receipt.php';
               }
             }
           })
@@ -333,7 +333,11 @@ include './php_function/initdb.php';
             confirmButtonColor: '#5B86FF'
           }).then((result) => {
             if (result.isConfirmed) {
-              window.location.href = './index.php';
+              if (inpurchase) {
+                window.location.href = './receipt.php';
+              } else {
+                window.location.href = './index.php';
+              }
             }
           })
         },

@@ -6,6 +6,7 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $inpurchase = $_POST['inpurchase'];
+    $return_id = '0';
 
     if ($inpurchase) {
         $name = $_POST['name'];
@@ -84,10 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
+        unset($_SESSION['cart']);
     }
-    
-
-    unset($_SESSION['cart']);
 } 
 
 ?>

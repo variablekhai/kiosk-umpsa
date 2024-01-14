@@ -107,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
+        unset($_SESSION['cart']);
     }
-
-    unset($_SESSION['cart']);
 }
