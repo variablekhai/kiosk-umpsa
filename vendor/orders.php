@@ -71,7 +71,7 @@ include '../php_function/initdb.php';
                 <!-- Order list based on order item-->
                 <?php
                 
-                $sql = "SELECT oi.id, o.name AS user, m.name, m.image, oi.quantity, o.total, o.status, o.date_created FROM OrderItem oi INNER JOIN Menu m INNER JOIN `Order` o
+                $sql = "SELECT oi.id, o.name AS user, m.name, m.image, oi.quantity, o.order_id, o.total, o.status, o.date_created FROM OrderItem oi INNER JOIN Menu m INNER JOIN `Order` o
                           ON oi.menu_id = m.menu_id AND oi.order_id = o.order_id
                             WHERE oi.kiosk_id = ".$_SESSION['kiosk_id']." AND o.status != 'Cancelled';";
                 
@@ -125,7 +125,7 @@ include '../php_function/initdb.php';
                     <td class="px-4 py-3">
                       <div class="flex items-center space-x-4 text-sm">
                         <button
-                          data-modal-target="edit-order-modal" data-modal-toggle="edit-order-modal" data-order-id="<?php echo $row['id']; ?>"
+                          data-modal-target="edit-order-modal" data-modal-toggle="edit-order-modal" data-order-id="<?php echo $row['order_id']; ?>"
                           class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-primary rounded-lg"
                           aria-label="Edit"
                         >

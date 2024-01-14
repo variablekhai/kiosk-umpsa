@@ -16,14 +16,9 @@ $(document).ready(function() {
             },
             success: function(data) {
                 var order = data;
-                console.log(order)
-                
+                // console.log(order.status)
+                // $('#status-edit option[value='+order.status+']').attr('selected', true);
                 $('#status-edit').val(order.status);
-                // $('#menuname-edit').val(menu.name);
-                // $('#description-edit').val(menu.description);
-                // $('#price-edit').val(menu.price);
-                // $('#quantity-edit').val(menu.quantity_remaining);
-                // $('#image-edit').val(menu.image);
             }
         });
     });
@@ -31,30 +26,22 @@ $(document).ready(function() {
     $('#edit-order-form').submit(function(e) {
 
         e.preventDefault();
-        // var name = $('#menuname-edit').val();
-        // var description = $('#description-edit').val();
-        // var price = $('#price-edit').val();
-        // var quantity = $('#quantity-edit').val();
-        // var image = $('#image-edit').val() ?? NULL;
+        var status = $('#status-edit :selected').val();
 
         $.ajax({
             type: "POST",
             url: "../php_function/updateOrderProcess.php",
             data: {
-                id: orderId
-                // name: name,
-                // description: description,
-                // price: price,
-                // quantity: quantity,
-                // image: image
+                id: orderId,
+                status: status
             },
             success: function(data) {
                 data = JSON.parse(data);
                 if (data[0] == "true") {
-                    alert("Menu updated successfully");
+                    alert("Order updated successfully");
                     location.reload();
                 } else {
-                    alert("Menu update failed");
+                    alert("Order update failed");
                 }
             }
         });
@@ -87,6 +74,7 @@ $(document).ready(function() {
                             <option value="Ordered">Ordered</option>
                             <option value="Preparing">Preparing</option>
                             <option value="Prepared">Prepared</option>
+                            <option value="Completed">Completed</option>
                             <option value="Cancelled">Cancelled</option>
                         </select>
                     </div>

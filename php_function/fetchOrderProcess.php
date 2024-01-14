@@ -5,7 +5,7 @@ include 'initdb.php';
 $orderId = $_POST['id'];
 
 // Prepare the SQL query
-$query = "SELECT oi.*, o.status FROM OrderItem oi INNER JOIN `Order` o ON oi.order_id = o.order_id WHERE id = '$orderId'";
+$query = "SELECT * FROM `Order` WHERE order_id = '$orderId'";
 
 // Execute the query
 $result = mysqli_query($conn, $query);
