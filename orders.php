@@ -184,9 +184,21 @@ include './php_function/initdb.php';
                 </div>
               </div>
 
-              <button onclick="onSubmit()" class="w-full py-3 bg-[#5B86FF] text-white ring-[#abc1ff] focus:outline-none focus:ring-4 mt-6 rounded-lg transition duration-300 poppins">Place
-                Order
-              </button>
+              <?php
+              if (($_SESSION['id'] == 'guest')) {
+              ?>
+                <button onclick="onSubmitGuest()" class="w-full py-3 bg-[#5B86FF] text-white ring-[#abc1ff] focus:outline-none focus:ring-4 mt-6 rounded-lg transition duration-300 poppins">Place
+                  Order
+                </button>
+              <?php
+              } else {
+              ?>
+                <button onclick="onSubmit()" class="w-full py-3 bg-[#5B86FF] text-white ring-[#abc1ff] focus:outline-none focus:ring-4 mt-6 rounded-lg transition duration-300 poppins">Place
+                  Order
+                </button>
+              <?php
+              }
+              ?>
             </div>
           </div>
         </div>
@@ -252,6 +264,38 @@ include './php_function/initdb.php';
           if (result.isConfirmed) {
             window.location.href = './user/orders.php';
           }
+        })
+      },
+      error: function(xhr, status, error) {
+        console.log(error);
+      }
+    });
+  }
+
+  function onSubmitGuest() {
+    var paymentType = $('input[name=option]:checked').val();
+    var name = $('#name').val();
+    var cart = <?php echo json_encode($cart) ?>;
+    var totalPrice = <?php echo $totalPrice ?>;
+    var user_id = '<?php echo isset($_SESSION['id']) ? $_SESSION['id'] : "" ?>';
+
+    $.ajax({
+      url: './php_function/createInPurchaseOrder.php',
+      type: 'POST',
+      data: {
+        name: name,
+        cart: cart,
+        totalPrice: totalPrice,
+        paymentType: paymentType,
+      },
+      success: function(response) {
+        console.log(response);
+        Swal.fire({
+          icon: 'success',
+          title: 'Order Placed!',
+          text: 'Your order is successful!',
+          confirmButtonText: 'Okay',
+          confirmButtonColor: '#5B86FF'
         })
       },
       error: function(xhr, status, error) {
