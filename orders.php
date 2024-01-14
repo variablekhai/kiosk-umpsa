@@ -66,6 +66,7 @@ include './php_function/initdb.php';
           <!-- Left Side -->
           <div class="col-span-1">
             <div class="flex flex-col mt-20">
+              <h1 class="text-5xl poppins pb-4 text-gray-900"><b><?php echo isset($_GET['inpurchase']) ? "In-Purchase" : "Order" ?></b></h1>
               <h1 class="text-2xl poppins pb-4 border-b border-gray-500 text-gray-700">Edit Payment Details</h1>
               <form id="paymentForm" class="my-4">
                 <div class="flex flex-col space-y-3">
