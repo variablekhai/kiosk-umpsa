@@ -1,16 +1,5 @@
 <?php
 include './php_function/initdb.php';
-include './php_function/authPage.php';
-
-if (isset($_SESSION['membership_id'])) {
-  $membership_id = $_SESSION['membership_id'];
-  $membership_query = "SELECT * FROM Membership m INNER JOIN User u WHERE m.membership_id = u.membership_id AND u.user_id = '" . $_SESSION['id'] . "'";
-  $membership_result = mysqli_query($conn, $membership_query);
-  $membership = mysqli_fetch_assoc($membership_result);
-
-  $points = $membership['membership_point'];
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -35,6 +24,15 @@ if (isset($_SESSION['membership_id'])) {
   <!-- Start Navbar -->
   <?php
   include('./php_function/navbar.php');
+
+  if (isset($_SESSION['membership_id'])) {
+    $membership_id = $_SESSION['membership_id'];
+    $membership_query = "SELECT * FROM Membership m INNER JOIN User u WHERE m.membership_id = u.membership_id AND u.user_id = '" . $_SESSION['id'] . "'";
+    $membership_result = mysqli_query($conn, $membership_query);
+    $membership = mysqli_fetch_assoc($membership_result);
+
+    $points = $membership['membership_point'];
+  }
 
   $cart = [];
 
@@ -79,7 +77,10 @@ if (isset($_SESSION['membership_id'])) {
                   </main>
 
                   <!-- Todo: For registered user, display their name, unregistered user, let them enter name, make it required -->
-                  <input value="<?php echo $_SESSION['name'] ?>" id="name" placeholder="Recipient Name" class="glass w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl" required>
+                  <?php
+                  $name = isset($_SESSION['name']) ? $_SESSION['name'] : '';
+                  ?>
+                  <input value="<?php echo $name ?>" id="name" placeholder="Recipient Name" class="glass w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl" required>
 
                   <div id="cardPayment">
                     <!-- Todo: Only shows cards field, if 'Online payment' -->
@@ -89,11 +90,20 @@ if (isset($_SESSION['membership_id'])) {
                       <input id="expiry" placeholder="Expiry Date" class="glass w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
                       <input id="cvv" placeholder="CVV" class="glass w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
                     </div>
-                    
+
                   </div>
 
-                  <p>You have <strong><?php echo $points ?></strong> points available</p>
-                  <input min="1" max="<?php echo $points ?>" type="number" id="points" placeholder="Enter points amount to use" class="glass w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
+
+                  <?php
+                  if (isset($_SESSION['membership_id'])) {
+                  ?>
+                    <p>You have <strong><?php echo $points ?></strong> points available</p>
+                    <input min="1" max="<?php echo $points ?>" type="number" id="points" placeholder="Enter points amount to use" class="glass w-full px-4 py-3 rounded-lg ring-[#abc1ff] focus:ring-4 focus:outline-none transition duration-300 border border-gray-300 focus:shadow-xl">
+                  <?php
+                  } else {
+                    echo "<p class='mt-2'>Please <a class='text-[#5B86FF] underline' href='./signin.php'>log in</a> to earn points.</p>";
+                  }
+                  ?>
 
                 </div>
               </form>
@@ -159,12 +169,13 @@ if (isset($_SESSION['membership_id'])) {
                   <span class="flex-grow poppins text-gray-700">Subtotal</span>
                   <span class="poppins font-semibold text-black">RM<?php echo number_format($totalPrice, 2); ?></span>
                 </div>
-                <div class="flex items-center">
-                  <!-- Todo: For registered user, calculate points based on RM1 = 2 points, unregistered user: signup to receive points -->
-                  <span class="flex-grow poppins text-gray-700">Points Earned</span>
-                  <span class="poppins font-semibold text-black"><?php echo $totalPointsEarned ?> points</span>
-                  <!-- <span class="poppins font-semibold text-black underline cursor-pointer"><a href="signup.html">Sign up to receive points</a></span> -->
-                </div>
+                <?php if (isset($_SESSION['membership_id'])) { ?>
+                  <div class="flex items-center">
+                    <!-- Todo: For registered user, calculate points based on RM1 = 2 points, unregistered user: signup to receive points -->
+                    <span class="flex-grow poppins text-gray-700">Points Earned</span>
+                    <span class="poppins font-semibold text-black"><?php echo $totalPointsEarned ?> points</span>
+                  </div>
+                <?php } ?>
                 <div class="flex items-center">
                   <!-- Todo: Calculation -->
                   <span class="flex-grow poppins text-gray-700 text-xl">Total</span>
@@ -189,6 +200,18 @@ if (isset($_SESSION['membership_id'])) {
 <script src="script.js"></script>
 
 <script>
+  $(document).ready(function() {
+    $('#cardPayment').hide();
+
+    $('input[type=radio][name=option]').change(function() {
+      if (this.value == 'Online') {
+        $('#cardPayment').show();
+      } else if (this.value == 'Cash') {
+        $('#cardPayment').hide();
+      }
+    });
+  });
+
   function onSubmit() {
 
     //get radio for payment
@@ -251,36 +274,23 @@ if (isset($_SESSION['membership_id'])) {
     });
   }
 
-  $(document).ready(function() {
-    $('#cardPayment').hide();
-
-    $('input[type=radio][name=option]').change(function() {
-      if (this.value == 'Online') {
-        $('#cardPayment').show();
-      } else if (this.value == 'Cash') {
-        $('#cardPayment').hide();
-      }
-    });
-  });
-
   $('#points').on('input', function() {
     var points = $(this).val();
     var availablePoints = <?php echo $points ?>;
-    
+
     // Check if the entered points exceed the available points
     if (points > availablePoints) {
       $(this).val(availablePoints); // Set the input value to the available points
       points = availablePoints; // Update the points variable
     }
-    
+
     var totalPrice = <?php echo $totalPrice ?>;
-    
+
     // Calculate the deducted total based on the input points
     var deductedTotal = totalPrice - (points * 0.05);
-    
+
     // Update the deducted total on the page
     $('#total').text('RM' + deductedTotal.toFixed(2));
     $('#points_used').text(' (' + points + ' points used)');
   });
-
 </script>

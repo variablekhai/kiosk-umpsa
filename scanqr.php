@@ -33,7 +33,7 @@
 <?php include 'php_function/navbar.php'; ?>
 
 <!-- Start Header -->
-<div id="reader" width="600px"></div>
+<div class="mt-24" id="reader" width="600px"></div>
 <!-- End Header -->
 </body>
 
