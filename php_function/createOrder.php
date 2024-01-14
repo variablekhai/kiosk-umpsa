@@ -63,6 +63,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$result_order_item) {
             die("Error executing query: " . mysqli_error($conn));
         }
+
+        //Update quantity menu
+        //Check Quantity
+        $menusql = "SELECT * FROM Menu WHERE menu_id = '$menu_id'";
+        $result_menu = mysqli_query($conn, $menusql);
+        while($row=mysqli_fetch_assoc($result_menu)){
+            $current_qty = $row['quantity_remaining'];
+            if($current_qty > $quantity){
+                $remaining_qty = $current_qty - $quantity;
+
+                // Update quantity
+                $upadte_sql = "UPDATE Menu SET quantity_remaining = $remaining_qty WHERE menu_id = '$menu_id'";
+                $result_updated = mysqli_query($conn, $upadte_sql);
+                if (!$result_updated) {
+                    die("Error executing query: " . mysqli_error($conn));
+                }
+            } else {
+                die("Not Enough Item: " . mysqli_error($conn));
+            }
+        }
+
     }
 
     unset($_SESSION['cart']);
