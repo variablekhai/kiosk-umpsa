@@ -2,6 +2,7 @@
 
 //get menuid from url
 $menuid = $_GET['id'];
+$inpurchase = isset($_GET['inpurchase']) ? $_GET['inpurchase'] : 0;
 
 //get menu details from database
 include_once './php_function/initdb.php';
@@ -67,7 +68,7 @@ $kiosk_id = $row['kiosk_id'];
 
     <!-- Back Button -->
     <div class="relative top-8">
-      <a href='/' className="hover:underline poppins text-gray-700 select-none flex items-center space-x-2">
+      <a href='./index.php' className="hover:underline poppins text-gray-700 select-none flex items-center space-x-2">
         <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
       </a>
     </div>
@@ -133,6 +134,9 @@ $kiosk_id = $row['kiosk_id'];
   // DO NOT DELETE I REPEAT DO NOT DELETE PLEASSEESAEASEASE
   $(document).ready(function() {
 
+    //check inpurchase
+    var inpurchase = <?php echo $inpurchase ?>
+
     // Quantity
     $('#add_quantity').click(function() {
       var quantity = parseInt($('#quantity').text());
@@ -171,9 +175,18 @@ $kiosk_id = $row['kiosk_id'];
             cancelButtonColor: '#5B86FF'
           }).then(function(result) {
             if (result.isConfirmed) {
-              window.location.href = "./index.php";
+              if (inpurchase) {
+                window.location.href = './scanqr.php'
+              } else {
+                window.location.href = "./index.php";
+              }
             } else {
-              window.location.href = "./orders.php";
+              if (inpurchase) {
+                window.location.href = "./orders.php?inpurchase=1";
+              } else {
+                window.location.href = "./orders.php";
+              }
+              
             }
           });
         },

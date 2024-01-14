@@ -10,7 +10,7 @@
   <script>
     $(document).ready(function() {
       function onScanSuccess(decodedText, decodedResult) {
-        window.location.href = `product.php?id=${decodedText}`;
+        window.location.href = `product.php?id=${decodedText}&inpurchase=1`;
       }
 
       function onScanFailure(error) {
@@ -38,7 +38,6 @@
   <?php include 'php_function/navbar.php';
 
   if (!isset($_SESSION['id'])) {
-    session_start();
     $_SESSION['id'] = 'guest';
     $_SESSION["name"] = "Guest";
     $_SESSION['cart'] = array();

@@ -71,7 +71,8 @@ if (isset($_SESSION['name']) && isset($_SESSION['email'])) {
           </div>
           <!-- Right Side -->
           <div class="flex items-center justify-end space-x-6">
-            <a class="bg-[#5B86FF] px-6 py-3 text-white poppins rounded-full ring-[#abc1ff] focus:outline-none focus:ring-4 transform transition duration-700 hover:scale-105" href="scanqr.php"><i class="fa-solid fa-qrcode"></i>&nbsp;Scan</a>
+          <a class="bg-[#5B86FF] px-6 py-3 text-white poppins rounded-full ring-[#abc1ff] focus:outline-none focus:ring-4 transform transition duration-700 hover:scale-105" href="scanqr.php"><i class="fa-solid fa-qrcode"></i>&nbsp;Scan</a>
+            <a href='orders.php'><i class="fa-solid fa-shopping-cart fa-lg"></i></a>   
             <button><a href="signin">Sign In</a></button>
             <button class="bg-[#5B86FF] px-6 py-3 text-white poppins rounded-full ring-[#abc1ff] focus:outline-none focus:ring-4 transform transition duration-700 hover:scale-105" onclick="location.href='signup'">Sign Up</button>
           </div>

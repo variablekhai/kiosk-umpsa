@@ -1,5 +1,6 @@
 <?php
 include './php_function/initdb.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +25,13 @@ include './php_function/initdb.php';
   <!-- Start Navbar -->
   <?php
   include('./php_function/navbar.php');
+  if (!isset($_SESSION['id'])) {
+    $_SESSION['id'] = 'guest';
+    $_SESSION["name"] = "Guest";
+    $_SESSION['cart'] = array();
+  }
+
+  $inpurchase = isset($_GET['inpurchase']) ? $_GET['inpurchase'] : 0;
 
   if (isset($_SESSION['membership_id'])) {
     $membership_id = $_SESSION['membership_id'];
@@ -226,6 +234,7 @@ include './php_function/initdb.php';
 
   function onSubmit() {
 
+    var inpurchase = <?php echo isset($inpurchase) ? $inpurchase : '0' ?>;
     //get radio for payment
     var paymentType = $('input[name=option]:checked').val();
 
@@ -239,69 +248,100 @@ include './php_function/initdb.php';
     var user_id = '<?php echo isset($_SESSION['id']) ? $_SESSION['id'] : "" ?>';
 
     //Send order request
-    $.ajax({
-      url: './php_function/createOrder.php',
-      type: 'POST',
-      data: {
-        name: name,
-        points: points,
-        cart: cart,
-        totalPrice: totalPrice,
-        totalPointsEarned: totalPointsEarned,
-        totalPointsUsed: totalPointsUsed,
-        membership_id: membership_id,
-        paymentType: paymentType,
-      },
-      success: function(response) {
-        console.log(response);
-        Swal.fire({
-          icon: 'success',
-          title: 'Order Placed!',
-          text: 'Your order has been placed and is being prepared!',
-          confirmButtonText: 'Okay',
-          confirmButtonColor: '#5B86FF'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = './user/orders.php';
-          }
-        })
-      },
-      error: function(xhr, status, error) {
-        console.log(error);
-      }
-    });
+    if (cart.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Empty Cart',
+        text: 'Your cart is empty. Please add items before placing an order.',
+        confirmButtonText: 'Okay',
+        confirmButtonColor: '#5B86FF'
+      });
+    } else {
+      $.ajax({
+        url: './php_function/createOrder.php',
+        type: 'POST',
+        data: {
+          name: name,
+          points: points,
+          cart: cart,
+          totalPrice: totalPrice,
+          totalPointsEarned: totalPointsEarned,
+          totalPointsUsed: totalPointsUsed,
+          membership_id: membership_id,
+          paymentType: paymentType,
+          inpurchase: inpurchase,
+        },
+        success: function(response) {
+          console.log(response);
+          Swal.fire({
+            icon: 'success',
+            title: 'Order Placed!',
+            text: 'Your order has been placed and is being prepared!',
+            confirmButtonText: 'Okay',
+            confirmButtonColor: '#5B86FF'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              if (!inpurchase) {
+                window.location.href = './user/orders.php';
+              } else {
+                window.location.href = './scanqr.php';
+              }
+            }
+          })
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    }
   }
 
   function onSubmitGuest() {
+    var inpurchase = <?php echo isset($inpurchase) ? $inpurchase : '0' ?>;
     var paymentType = $('input[name=option]:checked').val();
     var name = $('#name').val();
     var cart = <?php echo json_encode($cart) ?>;
     var totalPrice = <?php echo $totalPrice ?>;
     var user_id = '<?php echo isset($_SESSION['id']) ? $_SESSION['id'] : "" ?>';
 
-    $.ajax({
-      url: './php_function/createInPurchaseOrder.php',
-      type: 'POST',
-      data: {
-        name: name,
-        cart: cart,
-        totalPrice: totalPrice,
-        paymentType: paymentType,
-      },
-      success: function(response) {
-        console.log(response);
-        Swal.fire({
-          icon: 'success',
-          title: 'Order Placed!',
-          text: 'Your order is successful!',
-          confirmButtonText: 'Okay',
-          confirmButtonColor: '#5B86FF'
-        })
-      },
-      error: function(xhr, status, error) {
-        console.log(error);
-      }
-    });
+    if (cart.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Empty Cart',
+        text: 'Your cart is empty. Please add items before placing an order.',
+        confirmButtonText: 'Okay',
+        confirmButtonColor: '#5B86FF'
+      });
+    } else {
+      $.ajax({
+        url: './php_function/createOrderGuest.php',
+        type: 'POST',
+        data: {
+          name: name,
+          cart: cart,
+          totalPrice: totalPrice,
+          paymentType: paymentType,
+          inpurchase: inpurchase,
+        },
+        success: function(response) {
+          console.log(response);
+          Swal.fire({
+            icon: 'success',
+            title: 'Order Placed!',
+            text: 'Your order is successful!',
+            confirmButtonText: 'Okay',
+            confirmButtonColor: '#5B86FF'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = './index.php';
+            }
+          })
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    }
   }
 
   function onItemDelete(id) {

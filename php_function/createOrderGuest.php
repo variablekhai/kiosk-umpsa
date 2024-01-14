@@ -8,13 +8,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inpurchase = $_POST['inpurchase'];
 
     if ($inpurchase) {
-
         $name = $_POST['name'];
         $cart = $_POST['cart'];
         $totalPrice = $_POST['totalPrice'];
         $user_id = $_SESSION['id'];
         $payment_type = $_POST['paymentType'];
-
+    
         // Insert each item in the cart into the inpurchaseorder table
         foreach ($cart as $item) {
             $menu_id = $item['menu_id'];
@@ -22,19 +21,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $total = $quantity * $item['price'];
             $kiosk_id = $item['kiosk'];
             $id = uniqid();
-
+    
             $query = "INSERT INTO InPurchaseOrder (order_id, user_id, kiosk_id, menu_id, quantity, total, date_created) VALUES ('$id', '$user_id', '$kiosk_id', '$menu_id', '$quantity', '$total', NOW())";
             mysqli_query($conn, $query);
         }
-
     } else {
         $name = $_POST['name'];
-        $points = $_POST['points'];
         $cart = $_POST['cart'];
         $totalPrice = $_POST['totalPrice'];
-        $totalPointsEarned = $_POST['totalPointsEarned'];
-        $totalPointsUsed = $_POST['totalPointsUsed'];
-        $membership_id = $_POST['membership_id'];
         $user_id = $_SESSION['id'];
         $payment_type = $_POST['paymentType'];
 
@@ -55,23 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$result_payment) {
             die("Error executing query: " . mysqli_error($conn));
         }
-
-        // Query membership
-        $membership_query = "SELECT * FROM Membership WHERE membership_id = '$membership_id'";
-        $result_membership = mysqli_query($conn, $membership_query);
-
-        if (!$result_membership) {
-            die("Error executing query: " . mysqli_error($conn));
-        }
-
-        $membership = mysqli_fetch_assoc($result_membership);
-        $new_points = $membership['membership_point'] + $totalPointsEarned - $totalPointsUsed;
-        $membership_update_query = "UPDATE `Membership` SET `membership_point` = $new_points WHERE `membership_id` = '$membership_id'";
-        $result_membership_update = mysqli_query($conn, $membership_update_query);
-        if (!$result_membership_update) {
-            die("Error executing query: " . mysqli_error($conn));
-        }
-
 
         // Execute order items
         foreach ($cart as $item) {
@@ -108,6 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
+    
 
     unset($_SESSION['cart']);
-}
+} 
+
+?>
