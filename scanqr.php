@@ -35,14 +35,7 @@
 </head>
 
 <body class="poppins">
-  <?php include 'php_function/navbar.php';
-
-  if (!isset($_SESSION['id'])) {
-    $_SESSION['id'] = 'guest';
-    $_SESSION["name"] = "Guest";
-    $_SESSION['cart'] = array();
-  }
-  ?>
+  <?php include 'php_function/navbar.php';?>
 
   <!-- Start Header -->
   <div class="mt-24" id="reader" width="600px"></div>

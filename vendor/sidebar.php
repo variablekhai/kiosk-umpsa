@@ -1,13 +1,40 @@
 <?php
   $page = basename($_SERVER['PHP_SELF']);
-
-  
+  session_start();
+  $name = $_SESSION['kiosk_name'];
+  $status = $_SESSION['kiosk_status'];
+  $kioskId = $_SESSION['kiosk_id'];
 ?> 
 <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
       <div class="py-4 text-gray-500 dark:text-gray-400">
         <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
           Kiosk@UMPSA
         </a>
+        <p class="ml-6 text-gray-800"><?php echo $name; ?> - <b><?php echo $status; ?></b></p>
+        <?php 
+        if($status != 'close') {
+        ?>
+        <div class="px-6 my-6 rounded-full opacity-100">
+            <button id="btnStatus" onclick="location.href = '../php_function/kioskProcess.php?action=close&kioskId=<?php echo $kioskId ?>'"
+              class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-primary border border-transparent rounded-full focus:outline-none">
+              Close
+              <span class="ml-2" aria-hidden="true"><i class="fa-solid fa-door-closed"
+                  style="color: #ffffff;"></i></span>
+            </button>
+        </div>
+        <?php }
+        else {
+        ?>
+        <div class="px-6 my-6">
+            <button id="btnStatus" onclick="location.href = '../php_function/kioskProcess.php?action=open&kioskId=<?php echo $kioskId ?>'"
+              class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-primary border border-transparent rounded-full focus:outline-none">
+              Open
+              <span class="ml-2" aria-hidden="true"><i class="fa-solid fa-door-open"
+                  style="color: #ffffff;"></i></span>
+            </button>
+        </div>
+        <?php }
+        ?>
         <ul class="mt-6">
           <li class="relative px-6 py-3">
             <?php

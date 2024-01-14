@@ -63,13 +63,13 @@ if (isset($_GET['kiosk_id'])) {
         with tasty <a class="text-[#5B86FF]">campus</a> eats
       </h1>
 
-      <div
+      <!-- <div
         class="border border-[#5B86FF] rounded-full p-1 box-border mt-8 bg-white overflow-hidden ring-[#000] focus:ring-4 w-96 flex items-center">
         <input type="text" class="rounded-full px-4 focus:outline-none w-full bg-transparent"
           placeholder="Search here ......." />
         <button
           class="text-sm bg-[#5B86FF] py-3 px-6 rounded-full text-white ring-[#abc1ff] focus:ring-4 transition duration-300 hover:scale-105 transform">Search</button>
-      </div>
+      </div> -->
     </div>
   </section>
   <!-- End Header -->

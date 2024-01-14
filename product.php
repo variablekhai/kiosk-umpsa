@@ -46,21 +46,9 @@ $kiosk_id = $row['kiosk_id'];
 <body>
 
   <!-- Start Navbar -->
-  <header class="bg-transparent bg-transparent fixed z-50 top-0 left-0 w-full transition duration-500">
-    <nav class="flex items-center max-w-screen-xl mx-auto px-6 py-3">
-      <!-- Left Side -->
-      <div class="flex flex-grow">
-        Kiosk@UMPSA
-      </div>
-      <!-- Right Side -->
-      <div class="flex items-center justify-end space-x-6">
-        <button>Sign In</button>
-        <button
-          class="bg-[#5B86FF] px-6 py-3 text-white poppins rounded-full ring-[#abc1ff] focus:outline-none focus:ring-4 transform transition duration-700 hover:scale-    105">Sign
-          Up</button>
-      </div>
-    </nav>
-  </header>
+  <?php 
+  include 'php_function/navbar.php';
+  ?>
   <!-- End Navbar -->
 
   <!-- Start Main Body -->
@@ -106,6 +94,9 @@ $kiosk_id = $row['kiosk_id'];
           </div>
 
           <!-- Add to Cart Button -->
+          <?php 
+          if (($_SESSION['id'] == 'guest' && $inpurchase != 0) || $_SESSION['id'] != 'guest') {
+          ?>
           <div class="mt-8 flex items-center justify-center md:justify-start lg:justify-start">
             <button
               id="btnAddToCart"
@@ -113,7 +104,7 @@ $kiosk_id = $row['kiosk_id'];
               <span>Add to Cart</span>
             </button>
           </div>
-          
+          <?php } ?>
         </div>
 
         <!-- Right Side -->

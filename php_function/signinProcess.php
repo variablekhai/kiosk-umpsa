@@ -33,6 +33,15 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
         $_SESSION['membership_id'] = $membership['membership_id'];
 
     }
+    if($_SESSION["type"] == 'Vendor') {
+        $sql = "SELECT * FROM Kiosk WHERE kiosk_id = '".$_SESSION['kiosk_id']."'";
+        $result = mysqli_query($conn, $sql);
+        if(mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+            $_SESSION['kiosk_status'] = $row["status"];
+            $_SESSION['kiosk_name'] = $row['kiosk_name'];
+        }
+    }
     $arr = array($status, $type);
     echo json_encode($arr);
 }
