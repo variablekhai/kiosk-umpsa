@@ -2,7 +2,7 @@
 
 include 'php_function/initdb.php';
 
-$menu_query = "SELECT * FROM Menu";
+$menu_query = "SELECT m.*, k.`status` FROM Menu m LEFT JOIN Kiosk k ON m.`kiosk_id` = k.`kiosk_id`";
 $menu_result = mysqli_query($conn, $menu_query);
 
 if (!$menu_result) {
@@ -118,18 +118,23 @@ if (isset($_GET['kiosk_id'])) {
           <h1 class="text-gray-900 text-lg"><?php echo $menu['name'] ?></h1>
           <p class="text-gray-500 text-sm text-center"><?php echo $menu['description'] ?></p>
           <h2 class="text-gray-900 text-2xl font-bold">RM<?php echo number_format($menu['price'], 2) ?></h2>
-          <?php if ($menu['quantity_remaining'] == 0) : ?>
+          <?php $kiosk_status = $menu['status']; ?>
+          <?php if ($menu['quantity_remaining'] == 0){ ?>
             <h6 class="text-[#5B86FF] text-sm text-center">Sold Out</h6>
             <button disabled
               class="bg-[#2e4380] text-white px-8 py-2 focus:outline-none rounded-full mt-24 transform transition duration-300 hover:scale-105">Sold
               Out</button>
-          <?php else : ?>
+          <?php } else if ($menu['status'] == 'close') { ?>
+            <h6 class="text-[#5B86FF] text-sm text-center">Kiosk Closed</h6>
+            <button disabled
+              class="bg-[#2e4380] text-white px-8 py-2 focus:outline-none rounded-full mt-24 transform transition duration-300 hover:scale-105">Closed</button>
+          <?php } else { ?>
           <h6 class="text-[#5B86FF] text-sm text-center"><?php echo $menu['quantity_remaining'] ?> in stock</h6>
           <button
             onclick="window.location.href='product.php?id=<?php echo $menu['menu_id'] ?>'"
             class="bg-[#5B86FF] text-white px-8 py-2 focus:outline-none rounded-full mt-24 transform transition duration-300 hover:scale-105">Order
             Now</button>
-          <?php endif; ?>
+          <?php } ?>
         </div>
       </div>
       <?php } ?>
