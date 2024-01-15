@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Kiosk@UMPSA | Home</title>
+  <title>Kiosk@UMPSA | Scan QR</title>
   <?php include("php_function/head.php"); ?>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <script>

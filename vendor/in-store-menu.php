@@ -22,7 +22,7 @@ $menu = mysqli_fetch_all($menu_result, MYSQLI_ASSOC);
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kiosk@UMPSA | Orders</title>
+  <title>Kiosk@UMPSA | In-Store Menu</title>
   <link rel="stylesheet" href="../style.css" />
   <link rel="stylesheet" href="../assets/css/tailwind.output.css" />
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
