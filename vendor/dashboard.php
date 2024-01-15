@@ -99,7 +99,8 @@ include '../php_function/initdb.php';
                               ON p.order_id = o.order_id AND o.order_id = oi.order_id 
                                 WHERE o.status = 'Completed' AND oi.kiosk_id = ".$_SESSION['kiosk_id'];
               $payres = mysqli_query($conn, $paymentsql);
-              while($row=mysqli_fetch_assoc($payres)){
+              if(mysqli_num_rows($payres)){
+                while($row=mysqli_fetch_assoc($payres)){
               ?>
               <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b bg-gray-50">
                 <td class="px-4 py-3"><?php echo $row['name'] ?></td>
@@ -109,6 +110,7 @@ include '../php_function/initdb.php';
                 <td class="px-4 py-3"><?php echo $row['date_created'] ?></td>
               </tr>
               <?php
+                }
               }
               ?>
               </tbody>
