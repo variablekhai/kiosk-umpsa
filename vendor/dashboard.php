@@ -1,4 +1,7 @@
-<?php include('../php_function/authPage.php'); ?>
+<?php 
+include('../php_function/authPage.php');
+include '../php_function/initdb.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -76,11 +79,50 @@
             </div>
           </div>
         </div>
+
+        <!-- Table for List Payment -->
+        <div class="grid mb-8 md:grid-cols-1">
+          <div class="w-full p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+            <table id="payment_dt" class="w-full whitespace-no-wrap">
+              <thead>
+                <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b bg-gray-50">
+                    <th class="px-4 py-3">Name</th>
+                    <th class="px-4 py-3">Total</th>
+                    <th class="px-4 py-3">Quantity</th>
+                    <th class="px-4 py-3">Payment</th>
+                    <th class="px-4 py-3">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+              <?php
+              $paymentsql = "SELECT * FROM Payment p INNER JOIN `Order` o INNER JOIN OrderItem oi 
+                              ON p.order_id = o.order_id AND o.order_id = oi.order_id 
+                                WHERE o.status = 'Completed' AND oi.kiosk_id = ".$_SESSION['kiosk_id'];
+              $payres = mysqli_query($conn, $paymentsql);
+              while($row=mysqli_fetch_assoc($payres)){
+              ?>
+              <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b bg-gray-50">
+                <td class="px-4 py-3"><?php echo $row['name'] ?></td>
+                <td class="px-4 py-3"><?php echo $row['amount'] ?></td>
+                <td class="px-4 py-3"><?php echo $row['quantity'] ?></td>
+                <td class="px-4 py-3"><?php echo $row['payment_type'] ?></td>
+                <td class="px-4 py-3"><?php echo $row['date_created'] ?></td>
+              </tr>
+              <?php
+              }
+              ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
   </div>
   <script>
+
+    //Button Logout
     $("#btnLogout").click(function(e){
       e.preventDefault();
       $.post("../php_function/logoutProcess.php", '', function(result){
@@ -89,8 +131,10 @@
         }
       })
     })
+
+    //Fetch data
     <?php
-    include '../php_function/initdb.php';
+    
     $id = $_SESSION['id'];
 
     $query = "SELECT 
