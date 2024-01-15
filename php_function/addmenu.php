@@ -11,10 +11,10 @@ $name = $_POST['name'];
 $description = $_POST['description'];
 $price = $_POST['price'];
 $quantity = $_POST['quantity'];
-$menu_qr = '123456789';
+$image = $_POST['image'];
 $date = date("Y-m-d H:i:s");
 
-$sql = "INSERT INTO Menu VALUES ('$menu_id', '$kiosk', '$name', $price, '$description', '$quantity', '$menu_qr', '$date')";
+$sql = "INSERT INTO Menu VALUES ('$menu_id', '$kiosk', '$name', $price, '$description', '$quantity', '$image', '$date')";
 
 if(mysqli_query($conn, $sql)){
     $status = 'true';
