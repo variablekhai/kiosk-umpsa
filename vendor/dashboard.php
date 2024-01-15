@@ -179,14 +179,16 @@ include '../php_function/initdb.php';
       }
     }
         
-    $query = "SELECT m.`menu_id`, m.`name` AS menu_name, SUM(oi.`quantity`) AS total_quantity_ordered
+    $query = "SELECT m.`menu_id`, m.`name` AS menu_name, SUM(oi.`quantity`) AS total_quantity_ordered, k.`kiosk_name`
     FROM `OrderItem` oi
     INNER JOIN `Menu` m ON oi.`menu_id` = m.`menu_id`
     INNER JOIN `Vendor` v ON m.`kiosk_id` = v.`kiosk_id`
+    INNER JOIN `Kiosk` k ON k.`kiosk_id` = m.`kiosk_id`
     WHERE v.`user_id` = '$id'
     GROUP BY m.`menu_id`, m.`name`";
     $quantities = "";
     $labels = "";
+    $kiosk_name = "";
     $menus = [];
     // Execute the query
     $result = mysqli_query($conn, $query);
@@ -203,6 +205,7 @@ include '../php_function/initdb.php';
         $quantities = $quantities.',';
         $labels = $labels.',';
       }
+      $kiosk_name = $menu['kiosk_name'];
       $count++;
     }
     ?>
@@ -213,7 +216,7 @@ include '../php_function/initdb.php';
         labels: [<?php echo $monthStr; ?>],
         datasets: [
           {
-            label: 'Kiosk A',
+            label: '<?php echo $name; ?>',
             /**
              * These colors come from Tailwind CSS palette
              * https://tailwindcss.com/docs/customizing-colors/#default-color-palette

@@ -60,9 +60,10 @@ while($row = mysqli_fetch_assoc($result)) {
                         <?php
                         foreach($kiosks as $kiosk) {
                             $id = $kiosk['kiosk_id'];
+                            $kiosk_name = $kiosk['kiosk_name'];
                             $location = $kiosk['location'];
                             echo <<<HTML
-                            <option value="$id">$location</option>
+                            <option value="$id">$kiosk_name - $location</option>
                             HTML;
                         }
                         ?>
