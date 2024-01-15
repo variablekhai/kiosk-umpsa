@@ -18,12 +18,6 @@ if (isset($_SESSION['name']) && isset($_SESSION['email'])) {
     if ($image == null) {
         $image = "https://linguistics.ucla.edu/wp-content/uploads/2020/06/placeholder-300x248.jpg";
     }
-
-    if (!isset($_SESSION['id'])) {
-      $_SESSION['id'] = 'guest';
-      $_SESSION["name"] = "Guest";
-      $_SESSION['cart'] = array();
-    }
     
     echo <<<HTML
     <!-- Start Navbar -->
@@ -67,6 +61,11 @@ if (isset($_SESSION['name']) && isset($_SESSION['email'])) {
     </script>
     HTML;
 } else {
+  if (!isset($_SESSION['id'])) {
+    $_SESSION['id'] = 'guest';
+    $_SESSION["name"] = "Guest";
+    $_SESSION['cart'] = array();
+  }
     echo <<<HTML
     <!-- Start Navbar -->
     <header class="bg-transparent bg-transparent fixed z-50 top-0 left-0 w-full transition duration-500">
