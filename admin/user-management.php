@@ -1,5 +1,6 @@
 <?php
 include '../php_function/initdb.php';
+include('../php_function/authPage.php');
 
 // Fetch users from the database
 $user_query = "SELECT * FROM User";

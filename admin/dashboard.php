@@ -82,15 +82,15 @@ include '../php_function/initdb.php';
   </div>
   <script>
 
-    //Button Logout
-    $("#btnLogout").click(function(e){
-      e.preventDefault();
-      $.post("../php_function/logoutProcess.php", '', function(result){
-        if(result == 'true') {
-          location.href = "./"
-        }
-      })
-    })
+    // //Button Logout
+    // $("#btnLogout").click(function(e){
+    //   e.preventDefault();
+    //   $.post("../php_function/logoutProcess.php", '', function(result){
+    //     if(result == 'true') {
+    //       location.href = "index"
+    //     }
+    //   })
+    // })
 
     //Fetch data
     <?php

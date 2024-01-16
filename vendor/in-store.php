@@ -1,6 +1,7 @@
 <?php
 
 include '../php_function/initdb.php';
+include('../php_function/authPage.php');
 //get all menu data in Menu table by using InPurchaseMenu menu_id as reference
 $query = "SELECT * FROM Menu m INNER JOIN InPurchaseMenu i ON m.menu_id = i.menu_id";
 $result = mysqli_query($conn, $query);
