@@ -134,7 +134,7 @@ include '../php_function/initdb.php';
     }
 
     $query = "SELECT 
-      SUM(p.`amount`) AS total_amount,
+      SUM(p.`amount`) AS total_amount, MONTHNAME(o.`date_created`) AS order_month,
       k.`kiosk_name`
       FROM 
           `Payment` p
@@ -151,7 +151,7 @@ include '../php_function/initdb.php';
       WHERE 
           o.`status` = 'Completed'
       GROUP BY 
-        YEAR(o.`date_created`), MONTH(o.`date_created`), k.`kiosk_id`";
+      k.`kiosk_id`, YEAR(o.`date_created`), MONTH(o.`date_created`)";
 
     $result = mysqli_query($conn, $query);
 
@@ -162,10 +162,23 @@ include '../php_function/initdb.php';
 
     $dataStr = "";
     $count = 1;
+    $preKiosk = "";
     foreach($kiosks as $kiosk) {
-      $dataStr = $dataStr."{\nlabel: '".$kiosk['kiosk_name']."',\n";
-      $dataStr = $dataStr."backgroundColor: getRandomColorArray($count),\nborderColor: '#0694a2',\n";
-      $dataStr = $dataStr."data: [".$kiosk['total_amount']."],\nfill: false,\n},\n";
+      if($preKiosk != $kiosk['kiosk_name']) {
+        if($preKiosk != "") {
+          $dataStr = $dataStr."],\nfill: false,\n},\n";
+        }
+        $dataStr = $dataStr."{\nlabel: '".$kiosk['kiosk_name']."',\n";
+        $dataStr = $dataStr."backgroundColor: getRandomColorArray($count),\nborderColor: '#0694a2',\n";
+        $dataStr = $dataStr."data: [";
+      }
+      
+      $dataStr = $dataStr.$kiosk['total_amount'].",";
+      if($count == count($kiosks)) {
+        $dataStr = $dataStr."],\nfill: false,\n},\n";
+      }
+      $preKiosk = $kiosk['kiosk_name'];
+      $count++;
     }
         
     $query = "SELECT k.`kiosk_name`, SUM(oi.`quantity`) AS total_quantity_ordered
@@ -206,7 +219,7 @@ include '../php_function/initdb.php';
       const lineConfig = {
       type: 'line',
       data: {
-        labels: [<?php echo $monthStr; ?>],
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
         datasets: [<?php echo $dataStr; ?>],
       },
       options: {
